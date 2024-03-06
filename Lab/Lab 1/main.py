@@ -109,5 +109,3 @@ while ancora:
     else:
         print("fanculo")
         ancora = False
-
-
