@@ -1,4 +1,7 @@
-Paolo 4
-Lucia 1
-Mario 1
-Giuseppe 0
+stefan 4
+giuse 3
+chia 2
+frenz 2
+casio 1
+sted 1
+fra 0

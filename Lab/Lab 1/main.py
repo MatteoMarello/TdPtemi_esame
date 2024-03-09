@@ -1,4 +1,6 @@
 import random
+from operator import attrgetter
+
 class Domanda:
     def __init__(self, testo, livello, rispostaCorretta, rispostaSbagliata1, rispostaSbagliata2, rispostaSbagliata3):
         self.testo = testo
@@ -65,7 +67,6 @@ class Game:
                 lista.append(domanda)
         return lista
 
-
 lista_domande = []
 nome_file = "domande.txt"
 file = open(nome_file, "r")
@@ -99,13 +100,30 @@ for line in file:
 
 file.close()
 
-ancora = True
-while ancora:
-    scelta = input("\nVuoi giocare? ")
-    if scelta == "si":
-        game = Game(lista_domande)
-        (nickname, points) = game.gioco()
-        print(f"Bravo {nickname}, hai totalizzato {points} punti!")
-    else:
-        print("fanculo")
-        ancora = False
+lista_giocatori = []
+file_2 = "punti.txt"
+file_punti = open(file_2, 'r')
+for line in file_punti:
+    if line == '':
+        raise IOError
+    tokens = line.split(" ")
+    player = Player(tokens[0], int(tokens[1].strip()))
+    lista_giocatori.append(player)
+file_punti.close()
+
+
+scelta = input("\nVuoi giocare? ")
+if scelta == "si":
+    game = Game(lista_domande)
+    (nickname, points) = game.gioco()
+    print(f"Bravo {nickname}, hai totalizzato {points} punti!")
+    player = Player(nickname, int(points))
+    lista_giocatori.append(player)
+    lista_giocatori_ordinata = sorted(lista_giocatori, key=attrgetter('punteggio'), reverse=True)
+    file_writing = open('punti.txt', 'w')
+    for giocatore in lista_giocatori_ordinata:
+        file_writing.write(giocatore.nickname + " " + str(giocatore.punteggio)+"\n")
+
+else:
+    print("Gioco terminato!")
+    ancora = False
