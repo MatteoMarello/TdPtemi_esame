@@ -55,9 +55,9 @@ class Game:
                 return nickname, lvlAttuale
 
 
-        print(f"Hai totalizzato {lvlAttuale-1} punti!")
+        print(f"Hai totalizzato {lvlAttuale} punti!")
         nickname = input("Inserisci il tuo nickname: ")
-        return nickname, (lvlAttuale-1)
+        return nickname, (lvlAttuale)
 
 
     def getListaDomandeLivello(self, lvlAttuale):
@@ -118,7 +118,14 @@ if scelta == "si":
     (nickname, points) = game.gioco()
     print(f"Bravo {nickname}, hai totalizzato {points} punti!")
     player = Player(nickname, int(points))
-    lista_giocatori.append(player)
+    ce = False
+    for p in lista_giocatori:
+        if p.nickname == player.nickname:
+            ce = True
+            p.punteggio = points
+    if not ce:
+        lista_giocatori.append(player)
+
     lista_giocatori_ordinata = sorted(lista_giocatori, key=attrgetter('punteggio'), reverse=True)
     file_writing = open('punti.txt', 'w')
     for giocatore in lista_giocatori_ordinata:
