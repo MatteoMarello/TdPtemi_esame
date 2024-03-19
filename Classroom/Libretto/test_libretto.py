@@ -24,6 +24,19 @@ if voto_analisi2 is None:
 else:
     print(f'Hai preso {voto_analisi2.str_punteggio()}')
 
+# Con try - except gestisco l'eccezione che può essere generata dal metodo findByEsame2 nel caso in cui non dovesse
+# trovare un voto dell'esame passato in input!
+# Se l'istruzione del try genera un eccezione vado nell'except -- e il codice all'interno del blocco try non viene runnato.
+# Altrimenti, se non genera l'eccezione, l'except viene ignorato e viene runnato il codice nel try.
+try:
+    voto_analisi2 = lib.findByEsame2("Analisi III")
+    # In questo caso il programma, poichè non ho controllato il risultato, e il metodo genera un'eccezione, quest'eccezione
+    # non viene gestita dal mio programma chiamante e Python interrompe l'esecuzione!
+except ValueError:
+    print("Nessun voto trovato!")
+
+
+
 nuovo_voto = Voto("Fisica I", 10, 25, False, '2022-07-13')
 nuovo_voto2 = Voto("Fisica II", 10, 25, False, '2022-07-13')
 print("1)", lib.has_voto(nuovo_voto))
