@@ -1,4 +1,4 @@
-kissa gatto
+ciankissa gatto
 koira cane
 hevonen cavallo
 ehmä mucca
@@ -19,8 +19,8 @@ kymmenen dieci
 punainen rosso
 inen blu
 vihreä verde
-keltainen giallo
-musta nero
+keltainen giallo giallino
+musta nero nerino
 valkoinen bianco
 harmaa grigio
 oranssi arancione
@@ -96,13 +96,16 @@ tähti stella
 aurinko sole
 kukka fiore
 puu albero
-lehti foglia
+lehti rivista
 sade pioggia
 lumi neve
 tuuli vento
 myrsky tempesta
 kirja libro
-lehti rivista
 sanomalehti giornale
 kynä penna
-paperi carta
+paperi carta karta
+ciancio stupido caprone
+koi palla
+kittles zubidubidu
+papero cartono
