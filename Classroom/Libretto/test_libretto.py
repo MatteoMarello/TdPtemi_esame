@@ -42,3 +42,30 @@ nuovo_voto2 = Voto("Fisica II", 10, 25, False, '2022-07-13')
 print("1)", lib.has_voto(nuovo_voto))
 print("2)", lib.has_voto(nuovo_voto2))
 
+lib.append(Voto("Analisi 1", 10, 18, False, '2020-01-01'))
+lib.append(Voto("Chimica", 8, 30, False, '2020-01-02'))
+lib.append(Voto("Informatica", 8, 30, True, '2020-01-03'))
+lib.append(Voto("Algebra Lineare", 10, 24, False, '2020-06-01'))
+lib.append(Voto("Fisica 1", 10, 21, False, '2020-06-02'))
+
+migliorato = lib.crea_migliorato()
+
+print("Libretto originario")
+lib.stampa()
+print("Libretto migliorato")
+migliorato.stampa()
+
+# LIBRETTO ORDINATO ALFABETICAMENTE PER ESAME
+ordinato = lib.crea_ordinato_per_esame()
+print("\nEcco il tuo libretto ordinato per esame:")
+ordinato.stampa()
+
+# LIBRETTO ORDINATO IN ORDINE DECRESCENTE DI VOTO
+ordinato_punteggio = lib.crea_ordinato_per_punteggio()
+print("\nEcco il tuo libretto ordinato per punteggio:")
+ordinato_punteggio.stampa()
+
+# LIBRETTO SENZA VOTI BRUTTI
+lib.cancella_inferiori_a_punteggio(24)
+print("\nEcco il tuo libretto con i soli voti >= 24")
+lib.stampa()

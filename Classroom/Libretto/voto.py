@@ -1,3 +1,4 @@
+import operator
 from dataclasses import dataclass
 @dataclass
 class Voto:
@@ -18,6 +19,15 @@ class Voto:
         else:
             return str(self.punteggio)
 
+    def copy(self):
+        return Voto(self.esame, self.cfu, self.punteggio, self.lode, self.data)
+
+    def __str__(self):
+        return f'{self.esame} ({self.cfu} CFU): voto {self.str_punteggio()} in {self.data}'
+
+def estrai_campo_esame(v):
+    return v.esame
+
 class Libretto:
     def __init__(self):
         self._voti = []
@@ -25,7 +35,10 @@ class Libretto:
         # Viene usata questa notazione per proteggere degli attributi che preferisco non vengano modificati dall'esterno.
 
     def append(self, voto):
-        self._voti.append(voto)
+        if self.has_voto(voto) == False and self.has_conflitto(voto) == False:
+            self._voti.append(voto)
+        else:
+            raise ValueError("Voto non valido")
 
     def media(self):
         if len(self._voti) == 0:
@@ -99,3 +112,102 @@ class Libretto:
             if v.esame == voto.esame and not (v.punteggio == voto.punteggio and v.lode == voto.lode):
                 return True
         return False
+
+    def copy(self):
+        nuovo = Libretto()
+        for v in self._voti:
+            nuovo._voti.append(v.copy())
+
+        return nuovo
+
+    def crea_migliorato(self):
+        """
+        Crea una copia del libretto e migliora i voti in esso presenti.
+        :return:
+        """
+        nuovo = Libretto()
+        # nuovo._voti = self._voti.copy() # self._voti è una lista. Col metodo .copy() copio la lista dei voti per il mio nuovo libretto, tale e quale.
+        # Con .copy() copio la list dei voti del libretto non migliorato. Però è una lista di riferimenti agli oggetti voto esistenti,
+        # Quindi se poi modifico i voti del libretto migliorato, verranno modificati in automatico anche i voti del libretto non migliorato
+        # (perchè sto agendo sui riferimenti agli stessi oggetti Voto). Quindi quello che devo fare è creare dei nuovi oggetti Voto, uguali a quelli del libretto standard.
+        for v in self._voti:
+            nuovo._voti.append(v.copy())
+
+        for v in nuovo._voti:
+            if 18 <= v.punteggio <= 23:
+                v.punteggio += 1
+            elif 24 <= v.punteggio <= 28:
+                v.punteggio += 2
+            elif v.punteggio == 29:
+                v.punteggio = 30
+
+        return nuovo
+
+    def crea_ordinato_per_esame(self):
+        nuovo = self.copy()
+        nuovo.ordina_per_esame() # Chiamo il metodo ordina_per_esame che modifica la mia copia della lista dei voti, ordinandoli per esame.
+        return nuovo
+
+    def ordina_per_esame(self):
+        # Ordina self._voti per nome esame
+        # Se voglio ordinare una lista di oggetti utilizzando il metodo .sort() oppure .sorted(), dovrò prima definire il metodo
+        # __lt__ all'interno della classe Voto che specifica come andranno confrontati gli oggetti Voto quando viene riordinata la lista.
+        # Altrimenti posso usare il parametro key = operator.attrgetter(), e come parametro al metodo attrgetter passo l'attributo sul quale
+        # voglio confrontare gli oggetti della struttura dati che sto ordinando! In questo caso passo 'esame', dato che voglio ordinare
+        # gli oggetti Voto nella lista _voti in funzione del nome dell'esame
+        self._voti.sort(key=operator.attrgetter('esame'))
+
+    def crea_ordinato_per_punteggio(self):
+        nuovo = self.copy()
+        self._voti.sort(key=lambda v: (v.punteggio, v.lode), reverse=True) # Metto reverse=True perchè voglio l'ordinamento decrescente
+        return nuovo
+
+
+
+
+    def stampa(self):
+        print(f'Hai {len(self._voti)} voti')
+        for v in self._voti:
+            print(v)
+        print(f'La media vale: {self.media()}')
+
+    def cancella_inferiori_a_punteggio(self, punteggio):
+        """
+        for v in self._voti:
+            if v.punteggio < punteggio:
+                self._voti.remove(v)
+        for i in range(len(self._voti)):
+            if self._voti[i] < punteggio:
+                self._voti.pop(i)
+        """
+        # I metodi scritti sopra NON vanno bene! Perché non bisogna mai ciclare su una lista cancellandone gli elementi.
+        # Conviene ragionare al contrario --> Creo una lista nuova in cui aggiungo SOLAMENTE gli elementi che NON devo
+        # cancellare della lista di partenza!
+        voti_nuovi=[]
+        for v in self._voti:
+            if v.punteggio >= punteggio:
+                voti_nuovi.append(v)
+
+        # La lista voti_nuovi avrei potuto scriverla in egual modo con la sola istruzione:
+        # voti_nuovi = [v for v in self._voti if v.punteggio >= punteggio]
+        # Posso fare questa cosa quando devo creare una lista a partire da un altra con un if di mezzo!
+
+        self._voti = voti_nuovi
+
+
+    """
+    Opzione 1:
+    metodo stampa_per_nome e metodo stampa_per_punteggio, che semplicemente stampano e non modificano nulla
+    
+    Opzione 2:
+    metodo crea_libretto_ordinato_per nome e un metodo crea_libretto_ordinato_per_punteggio, che creano delle copie
+    separate, sulle quali potrò chiamare il metodo stampa() (che ho già)
+    
+    Opzione 3:
+    metodo ordina_per_nome che modifica il libretto stesso riordinando i voti, e metodo ordina_per_punteggio, poi userò
+    stampa()
+    
+    Opzione 2bis:
+    crea una copia shallow del libretto
+    
+    """
