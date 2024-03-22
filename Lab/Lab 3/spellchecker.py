@@ -23,7 +23,8 @@ class SpellChecker:
             print(f'Gli errori contenuti nella tua frase sono:')
             for err in errors:
                 print(err)
-        pass
+        elif len(errors)==0:
+            print(f'Non sono presenti errori nella tua frase!')
 
     def printMenu(self):
         print("______________________________\n" +
