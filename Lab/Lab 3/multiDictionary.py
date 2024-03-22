@@ -25,6 +25,24 @@ class MultiDictionary:
             richWords.append(richword)
         return richWords
 
+    def searchWordLinear(self, words, language):
+        richWords = []
+        dizionario = self.getDizionario(language)
+        for word in words:
+            richword = rw.RichWord(word)
+            corretta = False
+            for element in dizionario:
+                if word == element:
+                    richword.corretta = True
+                    richWords.append(richword)
+                    corretta = True
+                    break
+            if not corretta:
+                richword.corretta = False
+                richWords.append(richword)
+        return richWords
+
+
     def add_Dizionario(self, path, language):
         dict = d.Dictionary()
         lista_dict = dict.loadDictionary(path)

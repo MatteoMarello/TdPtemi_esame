@@ -20,6 +20,10 @@ while(True):
         print("Using Contains")
         sc.handleSentence(txtIn,"italian")
         print("------------------------------------------------")
+        print("Using Linear Research")
+        sc.handleSentenceLinear(txtIn, "italian")
+        print("------------------------------------------------")
+
         continue
 
     if int(txtIn) == 2:
@@ -29,6 +33,9 @@ while(True):
         print("Using Contains")
         sc.handleSentence(txtIn,"english")
         print("------------------------------------------------")
+        print("Using Linear Research")
+        sc.handleSentenceLinear(txtIn, "english")
+        print("------------------------------------------------")
         continue
 
     if int(txtIn) == 3:
@@ -37,6 +44,9 @@ while(True):
         print("------------------------------------------------")
         print("Using Contains")
         sc.handleSentence(txtIn,"spanish")
+        print("------------------------------------------------")
+        print("Using Linear Research")
+        sc.handleSentenceLinear(txtIn, "spanish")
         print("------------------------------------------------")
         continue
 
