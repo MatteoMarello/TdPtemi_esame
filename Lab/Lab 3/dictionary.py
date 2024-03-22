@@ -1,12 +1,17 @@
 class Dictionary:
     def __init__(self):
-        pass
+        self._dict = []
 
     def loadDictionary(self,path):
-        pass
+        file = open(path, 'r')
+        for line in file:
+            self._dict.append(line.strip())
+        return self._dict
 
     def printAll(self):
-        pass
+        print("Le parole contenute nel dizionario sono:\n")
+        for element in self._dict:
+            print(element)
 
 
     @property

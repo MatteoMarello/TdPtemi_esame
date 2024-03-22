@@ -1,6 +1,11 @@
 import spellchecker
 
+
 sc = spellchecker.SpellChecker()
+sc.creaDizionario(f'resources/English.txt', 'english')
+sc.creaDizionario(f'resources/Spanish.txt', 'spanish')
+sc.creaDizionario(f'resources/Italian.txt', 'italian')
+
 
 while(True):
     sc.printMenu()
