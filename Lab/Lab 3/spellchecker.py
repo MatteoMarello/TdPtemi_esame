@@ -9,6 +9,7 @@ class SpellChecker:
 
 
     def handleSentence(self, txtIn, language):
+        start_time = time.time()
         sentence = txtIn.split(" ")
         correct_sentence = []
         for word in sentence:
@@ -23,8 +24,9 @@ class SpellChecker:
             print(f'Gli errori contenuti nella tua frase sono:')
             for err in errors:
                 print(err)
-        elif len(errors)==0:
-            print(f'Non sono presenti errori nella tua frase!')
+        end_time = time.time()
+        total_time = end_time-start_time
+        print(f'Tempo di esecuzione: {total_time} secondi.')
 
     def printMenu(self):
         print("______________________________\n" +
