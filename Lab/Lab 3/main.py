@@ -23,6 +23,9 @@ while(True):
         print("Using Linear Research")
         sc.handleSentenceLinear(txtIn, "italian")
         print("------------------------------------------------")
+        print("Using Dichotomic Research")
+        sc.handleSentenceDichotomic(txtIn, "italian")
+        print("------------------------------------------------")
 
         continue
 
@@ -36,6 +39,9 @@ while(True):
         print("Using Linear Research")
         sc.handleSentenceLinear(txtIn, "english")
         print("------------------------------------------------")
+        print("Using Dichotomic Research")
+        sc.handleSentenceDichotomic(txtIn, "english")
+        print("------------------------------------------------")
         continue
 
     if int(txtIn) == 3:
@@ -47,6 +53,9 @@ while(True):
         print("------------------------------------------------")
         print("Using Linear Research")
         sc.handleSentenceLinear(txtIn, "spanish")
+        print("------------------------------------------------")
+        print("Using Dichotomic Research")
+        sc.handleSentenceDichotomic(txtIn, "spanish")
         print("------------------------------------------------")
         continue
 
