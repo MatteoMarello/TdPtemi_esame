@@ -123,7 +123,7 @@ class Libretto:
     def crea_migliorato(self):
         """
         Crea una copia del libretto e migliora i voti in esso presenti.
-        :return:
+        :return: Oggetto Libretto migliorato
         """
         nuovo = Libretto()
         # nuovo._voti = self._voti.copy() # self._voti è una lista. Col metodo .copy() copio la lista dei voti per il mio nuovo libretto, tale e quale.
@@ -193,21 +193,3 @@ class Libretto:
         # Posso fare questa cosa quando devo creare una lista a partire da un altra con un if di mezzo!
 
         self._voti = voti_nuovi
-
-
-    """
-    Opzione 1:
-    metodo stampa_per_nome e metodo stampa_per_punteggio, che semplicemente stampano e non modificano nulla
-    
-    Opzione 2:
-    metodo crea_libretto_ordinato_per nome e un metodo crea_libretto_ordinato_per_punteggio, che creano delle copie
-    separate, sulle quali potrò chiamare il metodo stampa() (che ho già)
-    
-    Opzione 3:
-    metodo ordina_per_nome che modifica il libretto stesso riordinando i voti, e metodo ordina_per_punteggio, poi userò
-    stampa()
-    
-    Opzione 2bis:
-    crea una copia shallow del libretto
-    
-    """
