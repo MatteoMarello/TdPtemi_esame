@@ -18,7 +18,43 @@ class Controller(object):
         self._model.append(Voto("Fisica I", 10, 18, False, '2020-01-01'))
 
     def handleAdd(self, e):
-        pass
+        nomeEsame = self._view._txtIn.value
+        if nomeEsame == "":
+            self._view._lvOut.controls.append(ft.Text("Il campo nome non può essere vuoto!", color="red"))
+            self._view.update()
+            return
+
+        strCfu = self._view._txtCFU.value
+        try:
+            intCfu = int(strCfu)
+        except ValueError:
+            self._view._lvOut.controls.append(ft.Text("Il campo CFU deve essere un intero.", color="red"))
+            self._view.update()
+            return
+
+        punteggio = self._view._ddVoto.value
+
+        if punteggio is None:
+            self._view._lvOut.controls.append(ft.Text("Il campo punteggio va selezionato!", color="red"))
+            self._view.update()
+            return
+
+        if punteggio == "30L":
+            punteggio = 30
+            lode = True
+        else:
+            punteggio = int(punteggio)
+            lode = False
+
+        data = self._view._datePicker.value
+        if data is None:
+            self._view._lvOut.controls.append(ft.Text("Il campo data va selezionato!", color="red"))
+            self._view.update()
+            return
+
+        self._model.append(Voto(nomeEsame, intCfu, punteggio, lode, f'{data.year}-{data.month}-{data.day}'))
+        self._view._lvOut.controls.append(ft.Text("Voto correttamente aggiunto!", color="green"))
+        self._view.update()
 
     def handlePrint(self, e):
         outList = self._model.stampaGUI()
