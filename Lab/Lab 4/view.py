@@ -28,7 +28,53 @@ class View(object):
 
         # Add your stuff here
 
-        self.page.add([])
+        # Row 1
+        self._txtLanguage = ft.Text("", color="green", visible=False)
+        self._langDD = ft.Dropdown(
+            label="Select language",
+            hint_text="Which language would you like to try?",
+            options=[
+                ft.dropdown.Option("Italian"),
+                ft.dropdown.Option("English"),
+                ft.dropdown.Option("Spanish"),
+            ],
+            autofocus=True,
+            width=760,
+            on_change=self.__controller.verifyLanguage
+        )
+
+        self._row1 = ft.Row([self._langDD])
+
+        # Row 2
+        self._txtSearch = ft.Text("", color="green", visible=False)
+        self._searchDD = ft.Dropdown(
+            label="Search modality",
+            options=[
+                ft.dropdown.Option("Default"),
+                ft.dropdown.Option("Linear"),
+                ft.dropdown.Option("Dichotomic"),
+            ],
+            autofocus=True,
+            width=180,
+            on_change=self.__controller.verifySearch
+        )
+
+        self._txtFieldSentence = ft.TextField(label="Write your sentence",
+                                              width=450)
+
+        self._btnSpellcheck = ft.ElevatedButton(text="Spellcheck",
+                                                on_click=self.__controller.handleSpellCheck)
+
+        self._row2 = ft.Row([self._searchDD, self._txtFieldSentence, self._btnSpellcheck])
+
+        # Row 3
+        self._txtError = ft.Text(visible=False)
+
+        # Row 4
+        self._lvOut = ft.ListView()
+
+
+        self.page.add(self._row1, self._txtLanguage, self._row2, self._txtSearch, self._txtError, self._lvOut)
 
         self.page.update()
 

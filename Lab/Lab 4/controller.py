@@ -57,6 +57,67 @@ class SpellChecker:
               "______________________________\n")
 
 
+    def verifyLanguage(self,e):
+        languages = ["Spanish", "Italian", "English"]
+        language = self._view._langDD.value
+
+        if language in languages:
+            self._view._txtLanguage.visible = True
+            self._view._txtLanguage.value = ""
+            self._view._txtLanguage.value = f'You\'ve selected the {language} language!'
+            self._view.update()
+        else:
+            self._view._txtLanguage.visible = True
+            self._view._txtLanguage.value = ""
+            self._view._txtLanguage.value = f'The selected language is not available!'
+            self._view._txtLanguage.color = "red"
+            self._view.update()
+
+    def verifySearch(self,e):
+        searchTypes = ['Default', 'Linear', 'Dichotomic']
+        searchType = self._view._searchDD.value
+
+        if searchType in searchTypes:
+            self._view._txtSearch.visible = True
+            self._view._txtSearch.value = ""
+            self._view._txtSearch.value = f'You\'ve selected the {searchType} search type!'
+            self._view.update()
+        else:
+            self._view._txtSearch.visible = True
+            self._view._txtSearch.value = ""
+            self._view._txtSearch.value = f'The selected search type is not available!'
+            self._view._txtSearch.color = "red"
+            self._view.update()
+
+    def handleSpellCheck(self,e):
+        language = self._view._langDD.value
+        if language is None:
+            self._view._txtError.visible = True
+            self._view._txtError.value = ""
+            self._view._txtError.value = f'You must choose a language!'
+            self._view._txtError.color = "red"
+            self._view.update()
+            return
+        else:
+            self._view._txtError.visible = False
+            self._view.update()
+
+        searchType = self._view._searchDD.value
+        if searchType is None:
+            self._view._txtError.visible = True
+            self._view._txtError.value = ""
+            self._view._txtError.value = f'You must choose a search type!'
+            self._view._txtError.color = "red"
+            self._view.update()
+            return
+        else:
+            self._view._txtError.visible = False
+            self._view.update()
+
+
+
+
+
 def replaceChars(text):
     chars = "\\`*_{}[]()>#+-.!$?%^;,=_~"
     for c in chars:
