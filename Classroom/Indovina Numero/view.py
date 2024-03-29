@@ -32,7 +32,11 @@ class View(object):
         # Row 3
         self._lvOut = ft.ListView()
 
-        self._page.add(self._titolo, row1, row2, self._lvOut)
+        self._pb = ft.ProgressBar(width=340, color="red")
+        self._pb.value = 0
+        self._col1 = ft.Column([ft.Text("Cmon!"), self._pb])
+
+        self._page.add(self._titolo, row1, row2,  self._col1, self._lvOut)
 
     def setController(self, controller):
         self._controller = controller
