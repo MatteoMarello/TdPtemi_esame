@@ -32,16 +32,18 @@ class Controller(object):
 
         self._view._txtMrim.value = mRim
 
-        if mRim == 0:
-            self._view._lvOut.controls.append(ft.Text(f'Hai perso! :-( Il segreto era: {self._model.segreto}'))
-            self._view.update()
-            return
-
         if result == 0:
             self._view._btnProva.disabled = True
             self._view._txtTentativo.disabled = True
             self._view._lvOut.controls.append(ft.Text(f'Hai vinto! :-)'))
-            self._view._btnProva.disabled = False
+            self._view._btnNuova.disabled = False
+            self._view.update()
+            return
+
+        if mRim == 0:
+            self._view._lvOut.controls.append(ft.Text(f'Hai perso! :-( Il segreto era: {self._model.segreto}'))
+            self._view._btnProva.disabled = True
+            self._view._txtTentativo.disabled = True
             self._view.update()
             return
 
