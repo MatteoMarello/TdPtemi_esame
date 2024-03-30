@@ -12,14 +12,14 @@ class SpellChecker:
         txtIn = replaceChars(txtIn.lower())
 
         words = txtIn.split()
-        paroleErrate = " - "
-
+        paroleErrate = ""
+        language = language.lower()
         match modality:
             case "Default":
                 t1 = time.time()
                 parole = self._multiDic.searchWord(words, language)
                 for parola in parole:
-                    if not parola.corretta:
+                    if parola.corretta == False:
                         paroleErrate = paroleErrate + str(parola) + " - "
                 t2 = time.time()
                 return paroleErrate, t2 - t1
@@ -29,7 +29,7 @@ class SpellChecker:
                 parole = self._multiDic.searchWordLinear(words, language)
                 for parola in parole:
                     if not parola.corretta:
-                        paroleErrate = paroleErrate + str(parola) + " "
+                        paroleErrate = paroleErrate + str(parola) + " - "
                 t2 = time.time()
                 return paroleErrate, t2 - t1
 
@@ -114,7 +114,17 @@ class SpellChecker:
             self._view._txtError.visible = False
             self._view.update()
 
+        txtInput = self._view._txtFieldSentence.value
+        bad_words, time = self.handleSentence(txtInput, language, searchType)
 
+        if len(self._view._lvOut.controls) != 0:
+            self._view._lvOut.controls.append(ft.Text('----------------------------------------------------'))
+        self._view._lvOut.controls.append(ft.Text(f'Your sentence: {txtInput}'))
+        self._view._txtFieldSentence.value = ""
+        self._view._lvOut.controls.append(ft.Text(f'Incorrect words: {bad_words}'))
+        self._view._lvOut.controls.append(ft.Text(f'Time requested with the {searchType} research: {time}'))
+
+        self._view.update()
 
 
 

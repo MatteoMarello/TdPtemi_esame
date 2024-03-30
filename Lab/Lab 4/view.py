@@ -71,7 +71,7 @@ class View(object):
         self._txtError = ft.Text(visible=False)
 
         # Row 4
-        self._lvOut = ft.ListView()
+        self._lvOut = ft.ListView(expand=1,spacing=10,padding=20,auto_scroll=True)
 
 
         self.page.add(self._row1, self._txtLanguage, self._row2, self._txtSearch, self._txtError, self._lvOut)
