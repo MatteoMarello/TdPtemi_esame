@@ -1,7 +1,8 @@
 import flet as ft
+
+import Classroom.Libretto.test_libretto
 from view import View
 from controller import Controller
-
 
 def main(page: ft.Page):
     v = View(page)  # Il view è l'unico che conosce la pagina e che quindi potrà modificarla
