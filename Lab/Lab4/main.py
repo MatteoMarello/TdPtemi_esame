@@ -1,5 +1,4 @@
 import flet as ft
-
 import controller as c
 import view as v
 
