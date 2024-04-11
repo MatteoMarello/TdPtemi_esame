@@ -13,6 +13,9 @@ class Review:
     review_text: str
 
     business_id: str
+    # Per rappresentare la relazione tra Review e Business, dato che una Review corrisponde a UNA sola Business, posso
+    # utilizzare sia il metodo scritto sopra, usando il business_id come attributo, altrimenti posso usare direttamente
+    # l'oggetto Business come attributo!
     business: Business
 
     def __eq__(self, other):
