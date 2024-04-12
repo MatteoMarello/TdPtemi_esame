@@ -66,5 +66,29 @@ class Controller:
 
 
     def handeIscrizione(self, e):
-        pass
+        matricolaStudente = self._view._textFieldMatricola.value
+        codiceCorso = self._view._dd.value
+
+        studente = self._model.getStudente(matricolaStudente)
+        if not studente:
+            self._view.create_alert("La matricola inserita non appartiene ad alcun studente!")
+            return
+
+        corso = self._model.getCorso(codiceCorso)
+        if not corso:
+            self._view.create_alert("Il corso inserito non esiste")
+            return
+
+        alreadyIscritto = self._model.verificaIscrizione(codiceCorso, matricolaStudente)
+        if alreadyIscritto:
+            self._view.create_alert("Lo studente è già iscritto al corso!")
+            return
+
+
+        success = self._model.iscrizione(matricolaStudente, codiceCorso)
+        if success:
+            self._view.create_alert("L'iscrizione è andata a buon fine!")
+        else:
+            self._view.create_alert("Si sono verificati degli errori...")
+
 

@@ -39,6 +39,50 @@ class CorsoDAO:
         cnx.close()
         return result
 
+    def getCorso(self, codins):
+        cnx = get_connection()
+        cursor = cnx.cursor(dictionary=True)
+        query = """SELECT * FROM corso WHERE codins = %s"""
+        cursor.execute(query, (codins,))
+        result = cursor.fetchone()
+
+        cursor.close()
+        cnx.close()
+
+        return result
+
+    def getIscrittoCorso(self, codins, matricola):
+        cnx = get_connection()
+        cursor = cnx.cursor(dictionary=True)
+        query = """SELECT * FROM iscrizione WHERE codins = %s AND matricola = %s"""
+        cursor.execute(query, (codins,matricola))
+        result = cursor.fetchone()
+
+        cursor.close()
+        cnx.close()
+
+        return result
+
+
+    def iscrizione(self, codins, matricola):
+        cnx = get_connection()
+        cursor = cnx.cursor(dictionary=True)
+        query = """INSERT INTO iscrizione (codins, matricola) VALUES (%s,%s)"""
+        cursor.execute(query, (codins,matricola))
+        try:
+            cnx.commit()
+            cursor.close()
+            cnx.close()
+            return True
+
+        except:
+            cnx.rollback()
+            cursor.close()
+            cnx.close()
+            return False
+
+
+
 
 if __name__ == "__main__":
     corso_dao = CorsoDAO()

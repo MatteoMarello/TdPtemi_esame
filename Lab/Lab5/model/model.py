@@ -40,3 +40,13 @@ class Model:
                     corsi_Studente = self._studenteDAO.getCorsiStudente(matricola)
                     studente.corsi = corsi_Studente
                     return corsi_Studente
+
+    def getCorso(self, codins):
+        return self._corsoDAO.getCorso(codins)
+
+    def verificaIscrizione(self, codiceCorso, matricolaStudente):
+        return self._corsoDAO.getIscrittoCorso(codiceCorso, matricolaStudente)
+
+    def iscrizione(self, matricola, codiceCorso):
+        return self._corsoDAO.iscrizione(codiceCorso, matricola)
+
