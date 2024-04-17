@@ -26,24 +26,54 @@ class Controller:
 
 
     def handleTopVendite(self, e):
+        self._view.lv.controls.clear()
         anno = self._view.dd_anno.value
-        if anno == "" or anno == "Nessun filtro":
+        if anno == "Nessun filtro":
             anno = None
 
         brand = self._view.dd_brand.value
-        if brand == "" or brand == "Nessun filtro":
+        if brand == "Nessun filtro":
             brand = None
 
         codice_retailer = self._view.dd_retailer.value
-        if codice_retailer == "" or codice_retailer == "Nessun filtro":
+        if codice_retailer == "Nessun filtro":
             codice_retailer = None
 
         topVendite = self._model.getTopVendite(anno, brand, codice_retailer)
+        if not topVendite:
+            self._view.lv.controls.append(ft.Text(f'Non risultano vendite di prodotti del brand {brand} dal retailer {self.retailer.nome}'))
         for vendita in topVendite:
-            print(vendita)
+            self._view.lv.controls.append(ft.Text(f'Data: {vendita['Data']}; Ricavo: {vendita['Ricavo']}; Retailer: {vendita['Retailer']}; Prodotto: {vendita['Prodotto']}\n'))
+
+        self._view.update_page()
 
     def handleAnalizzaVendite(self,e):
-        pass
+        self._view.lv.controls.clear()
+        anno = self._view.dd_anno.value
+        if anno == "Nessun filtro":
+            anno = None
+
+        brand = self._view.dd_brand.value
+        if brand == "Nessun filtro":
+            brand = None
+
+        codice_retailer = self._view.dd_retailer.value
+        if codice_retailer == "Nessun filtro":
+            codice_retailer = None
+
+        analisiVendite = self._model.getAnalisiVendite(anno,brand,codice_retailer)
+        if analisiVendite['numero_vendite'] == 0:
+            analisiVendite['ricavi_totali'] = 0
+
+        self._view.lv.controls.append(ft.Text(f'Statistiche vendite:\n', color="red", size=20))
+        self._view.lv.controls.append(ft.Text(f'Giro d\'affari: {analisiVendite.get('ricavi_totali')}\n'))
+        self._view.lv.controls.append(ft.Text(f'Numero vendite: {analisiVendite.get('numero_vendite')}\n'))
+        self._view.lv.controls.append(ft.Text(f'Numero retailers coinvolti: {analisiVendite.get('numero_retailers')}\n'))
+        self._view.lv.controls.append(ft.Text(f'Numero prodotti coinvolti: {analisiVendite.get('numero_prodotti')}\n'))
+
+        self._view.update_page()
+
+
 
     def readRetailer(self, e):
         self.retailer = e.control.data

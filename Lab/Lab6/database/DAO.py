@@ -88,9 +88,29 @@ class DAO():
             return res
 
 
+    @staticmethod
+    def getAnalisiVendite(anno, brand, codice_retailer):
+        cnx = DBConnect.get_connection()
+        if cnx is None:
+            print("Errore connessione")
+            return
+        else:
+            cursor = cnx.cursor(dictionary=True)
+            query =     """ SELECT SUM(gds.Unit_sale_price * gds.Quantity) as ricavi_totali, COUNT(*) as numero_vendite, COUNT(DISTINCT gds.Retailer_code) as numero_retailers, COUNT(DISTINCT gds.Product_number) as numero_prodotti  
+                            FROM go_daily_sales gds, go_products gp 
+                            WHERE gds.Product_number = gp.Product_number 
+                            AND gp.Product_brand = COALESCE (%s, gp.Product_brand)
+                            AND gds.Retailer_code = COALESCE (%s, gds.Retailer_code)
+                            AND YEAR (gds.`Date`) = COALESCE (%s, YEAR(gds.`Date`))"""
+
+            cursor.execute(query, (brand, codice_retailer, anno))
+            res = cursor.fetchone()
+            cursor.close()
+            cnx.close()
+            return res
+
 
 
 if __name__ == "__main__":
-    vendite = DAO.getTopVendite(2017, None, None)
-    for vendita in vendite:
-        print(vendita)
+    vendite = DAO.getAnalisiVendite(2016, None, None)
+    print(vendite)
