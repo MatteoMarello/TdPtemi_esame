@@ -17,19 +17,36 @@ class Model:
 
     def get_studenti_periodo(self, pd):
         # Soluzione con Join da SQL
-        # matricole = CorsoDAO.get_studenti_periodo(pd)
-        # return len(matricole)
-
-        # Soluzione con mappa relazioni
-        matricole = set()
-        for corso in self.corsi:
-            if corso.pd == int(pd):
-                matricole_corso = corso.get_studenti()
-                if matricole_corso is None:
-                    corso.studenti = CorsoDAO.get_studenti_singolo_corso(corso.codins)
-                    matricole_corso = corso.studenti
-
-                matricole = matricole.union(matricole_corso)
-
+        matricole = CorsoDAO.get_studenti_periodo(pd)
         return len(matricole)
+
+
+
+    def get_studenti_corso(self, codins):
+        for corso in self.corsi:
+            if corso.codins == codins:
+                if corso.studenti is None:
+                    corso.studenti = CorsoDAO.get_studenti_singolo_corso(codins)
+                    return corso.studenti
+                else:
+                    return corso.studenti
+
+
+
+    def getDettagliCorso(self, codiceCorso):
+        dettagli = {}
+        for corso in self.corsi:
+            if corso.codins == codiceCorso:
+                if corso.studenti is None:
+                    corso.studenti = CorsoDAO.get_studenti_singolo_corso(codiceCorso)
+
+                for studente in corso.studenti:
+
+                    if dettagli.get(studente.CDS) is None:
+                        dettagli[studente.CDS] = 1
+                    else:
+                        dettagli[studente.CDS] += 1
+
+        return dettagli
+
 

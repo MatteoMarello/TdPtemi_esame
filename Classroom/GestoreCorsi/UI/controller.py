@@ -36,11 +36,24 @@ class Controller:
         self._view.update_page()
 
     def get_studenti_corso(self,e):
-        pass
+        self._view.lst_result.controls.clear()
+        codiceCorso = self._view.txt_codice_corso.value
+        studenti_corso = self._model.get_studenti_corso(codiceCorso)
+        self._view.lst_result.controls.append(ft.Text(f'Il corso ha {len(studenti_corso)} iscritti:'))
+        for studente in studenti_corso:
+            self._view.lst_result.controls.append(ft.Text(studente.__str__()))
+        self._view.update_page()
+
 
     def get_dettaglio_corso(self,e):
-        pass
+        self._view.lst_result.controls.clear()
+        codiceCorso = self._view.txt_codice_corso.value
+        dettagli_corso = self._model.getDettagliCorso(codiceCorso)
+        self._view.lst_result.controls.append(ft.Text(f'Gli studenti nel corso {codiceCorso} sono divisi in questa maniera:'))
+        for cds, studenti in dettagli_corso.items():
+            self._view.lst_result.controls.append(ft.Text(f'{cds}: {studenti} studenti'))
 
+        self._view.update_page()
     def leggi_tendina(self, e):
         self._pd = self._view.dd_periodo.value
         print(self._pd)

@@ -58,7 +58,7 @@ class View(ft.UserControl):
         row2 = ft.Row(alignment=ft.MainAxisAlignment.CENTER, controls=[self.txt_codice_corso, self.btn_studenti_corso, self.btn_dettaglio_corso])
 
         # Result
-        self.lst_result = ft.ListView(expand=1, spacing=10, padding=10, auto_scroll=True)
+        self.lst_result = ft.ListView(expand=1, spacing=10, padding=10, auto_scroll=False)
 
 
         self._page.add(row1, row2, self.lst_result)
