@@ -55,5 +55,7 @@ if __name__ == "__main__":
     end_time = time()
     print(f'Elapsed time: {end_time-start_time}s')
 
-
+    start_time = time()
     print(model.calcola_anagrammi_list("casa"))
+    end_time = time()
+    print(f'Elapsed time with list: {end_time-start_time}s')
