@@ -1,4 +1,4 @@
-from database.DB_connect import DBConnect
+from Classroom.Anagrammi.database.DB_connect import DBConnect
 
 
 class DAO():
