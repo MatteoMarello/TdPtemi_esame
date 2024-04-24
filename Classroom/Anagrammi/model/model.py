@@ -1,9 +1,11 @@
 import copy
 from time import time
 from functools import lru_cache
+from Classroom.Anagrammi.database.DAO import DAO
 
 class Model:
     def __init__(self):
+        self.parole_dizionario = DAO.getWordsFromDictionary()
         self.anagrammi = set()
         self.anagrammi_list = []
 
@@ -48,10 +50,11 @@ class Model:
                 self.ricorsione_list(parziale, nuove_lettere_rimanenti)
                 parziale.pop()
 
+
 if __name__ == "__main__":
     model = Model()
     start_time = time()
-    print(model.calcola_anagrammi("casas"))
+    print(model.calcola_anagrammi("casa"))
     end_time = time()
     print(f'Elapsed time: {end_time-start_time}s')
 
