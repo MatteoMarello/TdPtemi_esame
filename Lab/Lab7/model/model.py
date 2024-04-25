@@ -24,6 +24,7 @@ class Model:
 
 
     def getSequenza(self, mese):
+        pass
 
 
 
