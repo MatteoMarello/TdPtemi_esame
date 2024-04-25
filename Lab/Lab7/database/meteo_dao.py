@@ -1,5 +1,5 @@
-from database.DB_connect import DBConnect
-from model.situazione import Situazione
+from Lab.Lab7.database.DB_connect import DBConnect
+from Lab.Lab7.model.situazione import Situazione
 
 
 class MeteoDao():
