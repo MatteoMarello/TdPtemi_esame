@@ -13,7 +13,7 @@ class QuickSort():
                 if sequenza[i] < pivot:
                     sequenza_smaller.append(sequenza[i])
 
-            sequenza_pivot = [n for n in sequenza if n==pivot]
+            sequenza_pivot = [n for n in sequenza if n == pivot]
 
             sequenza_larger = [n for n in sequenza if n > pivot]
 
