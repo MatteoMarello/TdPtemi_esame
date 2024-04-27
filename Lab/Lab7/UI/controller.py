@@ -32,7 +32,12 @@ class Controller:
             self._view.create_alert("Devi prima selezionare un mese!")
             return
         else:
-            self._model.getSequenza(self._mese)
+            sequenza, costo = self._model.getSequenza(self._mese)
+            self._view.lst_result.controls.clear()
+            self._view.lst_result.controls.append(ft.Text(f"La sequenza ottimale ha costo {costo}"))
+            for situazione in sequenza:
+                self._view.lst_result.controls.append((ft.Text(situazione.__str__())))
+        self._view.update_page()
 
     def read_mese(self, e):
         self._mese = int(e.control.value)
