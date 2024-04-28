@@ -1,4 +1,5 @@
 import copy
+from time import sleep
 
 from Lab.Lab7.database.meteo_dao import MeteoDao
 from Lab.Lab7.model.situazione import Situazione
@@ -33,7 +34,7 @@ class Model:
         self._costoOttimale = 1000000
         situazioni_mese_corrente = []
         for situazione in self._situazioni:
-            if situazione.data.month == mese:
+            if situazione.data.month == mese and situazione.data.day < 16:
                 situazioni_mese_corrente.append(situazione)
 
         self.ricorsione([], situazioni_mese_corrente)
@@ -51,7 +52,6 @@ class Model:
             for situazione in situazioni_mese_corrente:
                 parziale.append(situazione)
                 if self.soddisfa_vincoli(parziale):
-                    print(parziale)
                     self.ricorsione(parziale, situazioni_mese_corrente)
                 parziale.pop()
 
@@ -66,10 +66,7 @@ class Model:
         return costo
 
     def soddisfa_vincoli(self, parziale):
-        if len(parziale) == 0:
-            return True
-
-        ultima_situazione = parziale[-1]
+        ultima_situazione = parziale[len(parziale)-1]
         if len(parziale) != ultima_situazione.data.day:
             return False
 
@@ -77,22 +74,29 @@ class Model:
         cntMilano = 0
         cntGenova = 0
         giorni_consecutivi = {"Genova": 0, "Milano": 0, "Torino": 0}
-        for situazione in parziale:
-            if situazione.localita == "Torino":
+        for i in range(len(parziale)-1):
+            if parziale[i].localita == "Torino":
                 giorni_consecutivi["Torino"] += 1
                 giorni_consecutivi["Milano"] = 0
                 giorni_consecutivi["Genova"] = 0
                 cntTorino+=1
-            elif situazione.localita == "Milano":
+            elif parziale[i].localita == "Milano":
                 giorni_consecutivi["Torino"] = 0
                 giorni_consecutivi["Milano"] += 1
                 giorni_consecutivi["Genova"] = 0
                 cntMilano+=1
-            else:
+            elif parziale[i].localita == "Genova":
                 giorni_consecutivi["Torino"] = 0
                 giorni_consecutivi["Milano"] = 0
                 giorni_consecutivi["Genova"] += 1
                 cntGenova+=1
+
+        if ultima_situazione.localita == "Torino":
+            cntTorino+=1
+        elif ultima_situazione.localita == "Milano":
+            cntMilano+=1
+        elif ultima_situazione.localita == "Genova":
+            cntGenova+=1
 
         if cntMilano > 6 or cntGenova > 6 or cntTorino > 6:
             return False
@@ -115,6 +119,7 @@ class Model:
 
 if __name__ == "__main__":
     model = Model()
-    situazioni = model.getSequenza(2)
+    situazioni, costo = model.getSequenza(5)
     for situazione in situazioni:
-        print(situazione)
+        print(situazione.__str__())
+    print(costo)

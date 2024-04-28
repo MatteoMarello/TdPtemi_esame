@@ -1,3 +1,5 @@
+import time
+
 import flet as ft
 
 from Lab.Lab7.UI.view import View
@@ -32,11 +34,15 @@ class Controller:
             self._view.create_alert("Devi prima selezionare un mese!")
             return
         else:
+            start_time = time.time()
             sequenza, costo = self._model.getSequenza(self._mese)
+            end_time = time.time()
             self._view.lst_result.controls.clear()
             self._view.lst_result.controls.append(ft.Text(f"La sequenza ottimale ha costo {costo}"))
             for situazione in sequenza:
                 self._view.lst_result.controls.append((ft.Text(situazione.__str__())))
+
+            self._view.lst_result.controls.append(ft.Text(f'Elapsed time {end_time - start_time} secondi'))
         self._view.update_page()
 
     def read_mese(self, e):
