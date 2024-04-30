@@ -26,12 +26,13 @@ class Model:
         # caso ricorsivo
         else:
             for i in rimanenti:
+                parziale.append(i)
                 if self.is_soluzione_parziale(parziale, N):
-                    parziale.append(i)
                     nuovi_rimanenti = copy.deepcopy(rimanenti)
                     nuovi_rimanenti.remove(i)
                     self._ricorsione(parziale, nuovi_rimanenti, N)
-                    parziale.pop()
+                parziale.pop()
+
 
 
     def stampa_soluzione(self, soluzione, N):
@@ -93,36 +94,37 @@ class Model:
                 return False
 
         # vincolo 2) colonne
-        n_col = max(len(parziale) - N*N-1, 0)
+        n_col = max(len(parziale) - N*(N-1), 0)
         for col in range(n_col):
             somma = 0
-            sottolista = parziale[0*N + col : (N-1)*N+col + 1 : N] # Modo per scandire le matrici per colonnea, Il terzo elemento rappresenta il passo di campionamneto.
+            sottolista = parziale[0*N + col : (N-1)*N+col + 1: N]
             for elemento in sottolista:
                 somma += elemento
-
             if somma != numero_magico:
                 return False
-        """
-        # vincolo 3) diagonale 1
-        somma = 0
-        for riga_col in range(N):
-            somma += parziale[riga_col*N + riga_col]
-        if somma != numero_magico:
-            return False
 
-        #vincolo 4) diagonale 2
-        somma = 0
-        for riga_col in range(N):
-            somma += parziale[riga_col*N + (N-1-riga_col)]
-        if somma != numero_magico:
-            return False
-        """
+        # vincolo 3) diagonale 1. Da verificare solo se parziale ha lunghezza N*N
+        if len(parziale) == N*N:
+            somma = 0
+            for riga_col in range(N):
+                somma += parziale[riga_col*N + riga_col]
+            if somma != numero_magico:
+                return False
+
+
+        # vincolo 4) diagonale 2. Da verificare solo se sono arrivato ad inserire in parziale il primo elemento dell'ultima riga
+        if len(parziale) == N*(N-1)+1:
+            somma = 0
+            for riga_col in range(N):
+                somma += parziale[riga_col * N + (N-1-riga_col)]
+            if somma != numero_magico:
+                return False
 
         # tutti i vincoli soddisfatti
         return True
 
 if __name__ == "__main__":
-    N = 3
+    N = 4
     model = Model()
     model.risolvi_quadrato(N)
     print(f'Quadrato di lato {N} risolto con {model._n_iterazioni} iterazioni')
