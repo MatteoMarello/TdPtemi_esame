@@ -133,7 +133,6 @@ if __name__ == "__main__":
     #    print(evento)
 
     lista_eventi, utenti, ore_disservizio = model.worstCase(nerc, 4, 200)
-    ore_disservizio = model.calcolaOreDisservizio(lista_eventi)
     for evento in lista_eventi:
         print(evento)
     print(f'utenti disservizio {utenti}')
