@@ -1,6 +1,6 @@
-from database.DB_connect import DBConnect
-from model.nerc import Nerc
-from model.powerOutages import Event
+from Lab.Lab8.database.DB_connect import DBConnect
+from Lab.Lab8.model.nerc import Nerc
+from Lab.Lab8.model.powerOutages import Event
 
 
 class DAO():
@@ -14,7 +14,7 @@ class DAO():
         result = []
 
         cursor = conn.cursor(dictionary=True)
-        query = """ ADD YOUR QUERY """
+        query = """ SELECT * FROM Nerc n """
 
         cursor.execute(query)
 
@@ -28,14 +28,12 @@ class DAO():
     @staticmethod
     def getAllEvents(nerc):
         conn = DBConnect.get_connection()
-
         result = []
 
         cursor = conn.cursor(dictionary=True)
-        query = """ ADD YOUR QUERY """
+        query = """SELECT * FROM PowerOutages WHERE nerc_id = %s """
 
         cursor.execute(query, (nerc.id,))
-
         for row in cursor:
             result.append(
                 Event(row["id"], row["event_type_id"],
@@ -47,3 +45,9 @@ class DAO():
         cursor.close()
         conn.close()
         return result
+
+if __name__ == "__main__":
+    dao = DAO()
+    nerc = Nerc(8, 'RFC')
+    list_events = dao.getAllEvents(nerc)
+    print(list_events)
