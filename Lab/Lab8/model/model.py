@@ -15,6 +15,7 @@ class Model:
     def worstCase(self, nerc, maxY, maxH):
         self._listEvents = DAO.getAllEvents(nerc)
         self._solBest = []
+        self._utentiMax = 0
         self.ricorsione([], maxY, maxH, self._listEvents)
         ore_disservizio = self.calcolaOreDisservizio(self._solBest)
 
@@ -33,11 +34,11 @@ class Model:
         else:
             for evento in lista_eventi:
                 parziale.append(evento)
-                if self.soddisfaVincoli(parziale, maxY, maxH):
-                    copy_list = copy.deepcopy(lista_eventi)
-                    lista_eventi_nuova = self.getNuovaListaEventi(parziale, copy_list, maxH, maxY)
-                    self.ricorsione(parziale,maxY,maxH, lista_eventi_nuova)
+                copy_list = copy.deepcopy(lista_eventi)
+                lista_eventi_nuova = self.getNuovaListaEventi(parziale, copy_list, maxH, maxY)
+                self.ricorsione(parziale,maxY,maxH, lista_eventi_nuova)
                 parziale.pop()
+
 
     def getNuovaListaEventi(self, parziale, lista_eventi_esistente, maxH, maxY):
         lista_eventi_nuova = []
@@ -47,11 +48,11 @@ class Model:
 
         oreDisservizio = self.calcolaOreDisservizio(parziale)
         lista_copy = copy.deepcopy(lista_eventi_nuova)
+        annoMinLista = self.calcolaAnnoMin(parziale)
+        annoMaxLista = self.calcolaAnnoMax(parziale)
         for evento in lista_copy:
             annoMin = evento.date_event_began.year
             annoMax = evento.date_event_finished.year
-            annoMinLista = self.calcolaAnnoMin(parziale)
-            annoMaxLista = self.calcolaAnnoMax(parziale)
             if abs(annoMaxLista - annoMin) > maxY or abs(annoMax-annoMinLista) > maxY:
                 lista_eventi_nuova.remove(evento)
                 continue
@@ -129,8 +130,6 @@ if __name__ == "__main__":
     model = Model()
     nerc = Nerc(1, "ERCOT")
     list_events=DAO.getAllEvents(nerc)
-    #for evento in list_events:
-    #    print(evento)
 
     lista_eventi, utenti, ore_disservizio = model.worstCase(nerc, 4, 200)
     for evento in lista_eventi:
