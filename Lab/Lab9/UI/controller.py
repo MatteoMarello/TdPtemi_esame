@@ -9,4 +9,4 @@ class Controller:
         self._model = model
 
     def handleAnalizza(self,e):
-        pass
+        self._model.buildGraph()
