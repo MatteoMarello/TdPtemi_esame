@@ -78,5 +78,64 @@ def creaGrafo():
     # Con il print sotto noto che ci sono due archi che collegano il nodo 1 al nodo 2. Uno è senza attributo, l'altro ha attributo 'foo'.
     print(multiGraph[1])
 
+    print("------------------------------------------------------")
+    print("SUBGRAPH")
+    G = nx.Graph()
+    G.add_edges_from([(1, 2), (1, 3), (2, 3), (3, 4)])
+
+    # Creazione di un sottoinsieme del grafo includendo i nodi 1 e 2
+    subgraph = G.subgraph([1, 2])
+
+    # Stampa dei nodi e degli archi del sottoinsieme
+    print("Nodi del sottoinsieme:", subgraph.nodes())
+    print("Archi del sottoinsieme:", subgraph.edges())
+
+    print("------------------------------------------------------")
+    print("DISJOINT_UNION")
+    # Creazione dei grafi G1 e G2
+    G1 = nx.Graph()
+    G1.add_edges_from([(1, 2), (2, 3)])
+
+    G2 = nx.Graph()
+    G2.add_edges_from([(3, 4), (4, 5)])
+
+    # Unione dei due grafi
+    union_graph = nx.disjoint_union(G1, G2)
+
+    # Stampa dei nodi e degli archi del grafo unione
+    print("Nodi del grafo unione:", union_graph.nodes())
+    print("Archi del grafo unione:", union_graph.edges())
+
+
+    print("------------------------------------------------------")
+    print("COMPOSE")
+    # Con .compose() i nodi dei due grafi si uniscono singolarmente all'interno di un unico grafo, e tutti gli archi
+    # presenti nei due grafi vengono copiate nel grafo risultante.
+    # Creazione dei grafi G1 e G2
+    G1 = nx.Graph()
+    G1.add_edges_from([(1, 2), (2, 3), (3, 4)])
+
+    G2 = nx.Graph()
+    G2.add_edges_from([(3, 4), (4, 5), (5, 6)])
+
+    # Composizione dei due grafi
+    composed_graph = nx.compose(G1, G2)
+
+    # Stampa dei nodi e degli archi del grafo composto
+    print("Nodi del grafo composto:", composed_graph.nodes())
+    print("Archi del grafo composto:", composed_graph.edges())
+
+    print("------------------------------------------------------")
+    print("COMPLEMENT")
+    # .complement() mi restituisce un grafo complementare a quello fornito in input. Ciò significa che avrà gli stessi nodi
+    # del grafo in input, ma archi completamente diversi: i nodi che nel grafo di partenza sono connessi da un arco, non
+    # saranno più connessi nel grafo risultante, e i nodi che inizialmente non erano connessi nel grafo di partenza, ora
+    # saranno connessi da un arco.
+    complementGraph = nx.complement(G1)
+    print("Nodi del grafo complementare:", complementGraph.nodes())
+    print("Archi del grafo complementare:", complementGraph.edges())
+
+
+
 if __name__ == "__main__":
     creaGrafo()
