@@ -15,4 +15,4 @@ class Airport:
         return hash(self.id)
 
     def __str__(self):
-        return f'{self.id} - {self.airport}'
+        return f'{self.airport}'
