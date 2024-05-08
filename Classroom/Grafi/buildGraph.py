@@ -46,6 +46,15 @@ def creaGrafo():
     # Metodo per stampare gli archi di un grafo
     print(f'Edges: {myGraph.edges}')
 
+    myGraph.edges(data=True)
+    # In questo modo, con data=True, .edges mi restituisce non solo una lista di tuple formate da due elementi in cui vengono
+    # indicati i nodi tra cui è presente un arco, ma all'interno delle tuple ci sono tanti altri argomenti quanti sono gli attributi
+    # di quell'arco sotto forma di dizionari. Quindi se scrivo .add_edge(1,2,weight=10), quando mi prendo gli edges del grafo con data=True,
+    # oltre ad avere (1,2), avrò (1,2,{'weight':10}).
+    # Un'altra opzione che posso avere dato i nodi di un arco per ottenere gli attributi associati all'arco, è utilizzare
+    # il metodo .get_edge_data(), a cui passo come parametri i due nodi e mi restituisce un dizionario con tutti gli attributi
+    # e i valori associati a quegli attributi dell'arco.
+
     print("------------------------------------------------------")
     # Con .DiGraph() costruisco un grafo diretto! Gli archi saranno unidirezionali.
     myDiGraph = nx.DiGraph()
