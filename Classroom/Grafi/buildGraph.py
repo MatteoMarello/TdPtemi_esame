@@ -19,7 +19,7 @@ def creaGrafo():
     # Metodo per aggiungere un arco pesato fra due nodi! Il terzo parametro è il "peso" o "costo" di quell'arco.
     myGraph.add_edge(1, 2, weight = 5)
 
-    print(1 in myGraph) # Restituisce True/F alse a seconda se è presente il nodo passato in input all'interno del grafo.
+    print(1 in myGraph) # Restituisce True/False a seconda se è presente il nodo passato in input all'interno del grafo.
 
     # Ciclo su tutti i nodi del grafo
     for v in myGraph:
@@ -29,6 +29,14 @@ def creaGrafo():
     for v in myGraph[1]:
         print(v)
 
+    # Dato che con .Graph() costruiso un grafo semplice e non orientato, se nel mio grafo è già presente l'arco tra due nodi,
+    # ad esempio (1,2) che ho aggiunto sopra, e provo ad aggiungere l'arco (2,1), non cambierà nulla nel mio grafo perchè i
+    # due nodi risulteranno già connessi!
+    myGraph.add_edge(2,1)
+
+    # In questo caso io non ho mai aggiunto un arco (2,1), ma dato che ho aggiunto l'arco (1,2) e dato che il mio grafo
+    # è semplice e non orientato, l'arco (1,2) equivale all'arco (2,1) pertanto il metodo sottostante mi restituisce True.
+    print(myGraph.has_edge(2,1))
 
 
     # Metodo per stampare le informazioni sul grafo (numero di nodi e di archi)
@@ -38,6 +46,7 @@ def creaGrafo():
     # Metodo per stampare gli archi di un grafo
     print(f'Edges: {myGraph.edges}')
 
+    print("------------------------------------------------------")
     # Con .DiGraph() costruisco un grafo diretto! Gli archi saranno unidirezionali.
     myDiGraph = nx.DiGraph()
     myDiGraph.add_nodes_from(mynodes)
