@@ -54,6 +54,8 @@ def creaGrafo():
     # Un'altra opzione che posso avere dato i nodi di un arco per ottenere gli attributi associati all'arco, è utilizzare
     # il metodo .get_edge_data(), a cui passo come parametri i due nodi e mi restituisce un dizionario con tutti gli attributi
     # e i valori associati a quegli attributi dell'arco.
+    # un altro modo per accedere a un attributo di un arco, ad esempio all'attributo "weight", è quello di fare direttamente
+    # grafo[v][u]["weight"] e mi restituisce il valore associato all'attributo indicato dell'arco presente tra i due nodi.
 
     print("------------------------------------------------------")
     # Con .DiGraph() costruisco un grafo diretto! Gli archi saranno unidirezionali.
