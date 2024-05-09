@@ -10,6 +10,7 @@ class Model:
             self._idMap[f.id_fermata] = f
 
     def buildGraph(self):
+        self._grafo.clear()
         self._grafo.add_nodes_from(self._fermate)
 
         # Modo 1 per aggiungere gli archi: doppio loop sui nodi e query per ogni coppia di nodi per vedere se c'è una linea che collega le due fermate.
@@ -49,6 +50,61 @@ class Model:
             self._grafo.add_edge(u_nodo, v_nodo)
             # print(f"Added edge between {u_nodo} and {v_nodo}")
 
+    def buildGraphPesato(self):
+        self._grafo.clear()
+        self._grafo.add_nodes_from(self._fermate)
+        self.addEdgePesati()
+
+    def addEdgePesati(self):
+        self._grafo.clear_edges()
+        allConnessioni = DAO.getAllConnessioni()
+        for c in allConnessioni:
+            if self._grafo.has_edge(self._idMap[c.id_stazP], self._idMap[c.id_stazA]):
+                # con il metodo sottostante verifico se c'è già un arco tra due nodi; in caso affermativo
+                # aumento il peso dell'arco di 1.
+                # con graph[u][v]["weight"] accedo all'attributo weight dell'arco presente tra i nodi u e v.
+                self._grafo[self._idMap[c.id_stazP]][self._idMap[c.id_stazA]]["weight"] +=1
+            else:
+                # se l'arco non è ancora stato aggiunto, lo aggiungo e imposto l'attributo weight pari a 1.
+                self._grafo.add_edge(self._idMap[c.id_stazP], self._idMap[c.id_stazA], weight = 1)
+
+    # Metodo per implementare un algoritmo di tipo BFS per visitare il nostro grafo
+    def getBFSNodes(self, source):
+        edges = nx.bfs_edges(self._grafo, source=source)
+        visited = []
+        # il risultato del metodo .bfs_edges è un generatore, su cui posso iterare per ottenere source e target del mio albero di visita!
+        # se faccio for u, v in edges: u e v saranno i nodi source e target di ognuno di questi archi risultanti dal metodo .bfs_edges che ha generato l'albero di visita.
+        for u, v in edges:
+            # u: nodo source
+            # v: nodo target
+            # aggiungo alla lista dei nodi visitati tutti i nodi "target" degli archi del cammino minimo su cui sto iterando
+            visited.append(v)
+        return visited
+
+    def getDFSNodes(self, source):
+        edges = nx.dfs_edges(self._grafo, source)
+        visited = []
+        for u,v in edges:
+            visited.append(v)
+        return visited
+
+    def getArchiPesoMaggiore(self):
+        if len(self._grafo.edges) == 0:
+            print("Il grafo è vuoto")
+            return
+
+        edges = self._grafo.edges
+        result = []
+        for u, v in edges:
+            peso = self._grafo[u][v]["weight"]
+            if peso > 1:
+                result.append((u,v,peso))
+
+        return result
+
+    def getEdgeWeight(self, v1, v2):
+        # questo metodo restituisce il peso dell'arco dati due nodi
+        return self._grafo[v1][v2]["weight"]
 
     @property
     def fermate(self):
@@ -66,3 +122,4 @@ if __name__ == "__main__":
     mymodel.buildGraph()
     print(f'The graph has {mymodel.getNumNodes()} nodes.')
     print(f'The graph has {mymodel.getNumEdges()} edges.')
+
