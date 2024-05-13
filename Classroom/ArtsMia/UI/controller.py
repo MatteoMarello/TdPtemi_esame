@@ -18,19 +18,22 @@ class Controller:
         self._view.update_page()
 
     def handleCompConnessa(self,e):
+        self._view._txt_result.controls.clear()
         idAdded = self._view._txtIdOggetto.value
         try:
             intId = int(idAdded)
             if self._model.checkExistence(intId):
                 self._view._txt_result.controls.append(ft.Text(f"L'oggetto {intId} è presente nel grafo!"))
+                sizeConnessa = self._model.getConnessa(intId)
+                self._view._txt_result.controls.append(ft.Text(f"La componente connessa che contiene {intId} ha dimensione {sizeConnessa}"))
             else:
                 self._view._txt_result.controls.append(ft.Text(f"L'oggetto {intId} NON è presente nel grafo!"))
         except ValueError:
             self._view._txt_result.controls.clear()
             self._view._txt_result.controls.append(ft.Text("Il valore inserito non è un intero!"))
 
-
         self._view.update_page()
+
 
 
 
