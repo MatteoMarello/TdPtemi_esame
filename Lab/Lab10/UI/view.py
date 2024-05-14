@@ -27,7 +27,11 @@ class View(ft.UserControl):
         row1 = ft.Row([self._txtAnno, self._btnCalcola], alignment=ft.MainAxisAlignment.CENTER)
         self._page.controls.append(row1)
         # List View where the reply is printed
+        self._dd = ft.Dropdown(value="Stato", disabled=True)
+        self._btnStatiRagg = ft.ElevatedButton(text="Stati Raggiungibili", on_click=self._controller.handleStatiRaggiungibili, disabled=True)
+        row2 = ft.Row(controls=[self._dd, self._btnStatiRagg], alignment=ft.MainAxisAlignment.CENTER)
         self._txt_result = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=False)
+        self._page.add(row2)
         self._page.controls.append(self._txt_result)
         self._page.update()
 
