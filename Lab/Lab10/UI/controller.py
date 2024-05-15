@@ -41,7 +41,17 @@ class Controller:
         self._view.update_page()
 
     def handleStatiRaggiungibili(self, e):
-        print(self._countryDD.StateNme)
+        self._view._txt_result.controls.clear()
+        if self._countryDD is None:
+            self._view._txt_result.controls.append(ft.Text(f'Devi prima selezionare uno stato dal menù a tendina!'))
+            self._view.update_page()
+            return
+        else:
+            statiRaggiungibili = self._model.getNodiRaggiungibiliIterativo(self._countryDD)
+            for country in statiRaggiungibili:
+                self._view._txt_result.controls.append(ft.Text(country))
+
+        self._view.update_page()
 
     def readDDCountry(self, e):
         if e.control.data is None:

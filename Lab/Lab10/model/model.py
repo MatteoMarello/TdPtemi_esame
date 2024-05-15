@@ -35,6 +35,25 @@ class Model:
     def getNumConnectedComp(self):
         return nx.number_connected_components(self._graph)
 
+
+    def getNodiRaggiungibiliDFS(self, statoSource):
+        alberoStatiRaggiungibili = nx.dfs_tree(self._graph, statoSource)
+        statiRaggiungibili = alberoStatiRaggiungibili.nodes
+        return statiRaggiungibili
+
+    def getNodiRaggiungibiliIterativo(self, statoSource):
+        daVisitare = [statoSource]
+        visitati = []
+        while len(daVisitare) != 0:
+            country = daVisitare.pop()
+            visitati.append(country)
+            for otherCountry in self._graph.nodes:
+                if self._graph.has_edge(country, otherCountry):
+                    if otherCountry not in visitati:
+                        daVisitare.append(otherCountry)
+
+        return visitati
+
 if __name__ == "__main__":
     model = Model()
     model.creaGrafo(1980)
