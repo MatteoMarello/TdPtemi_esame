@@ -1,3 +1,5 @@
+import copy
+
 import networkx as nx
 from Classroom.ArtsMia.database.DAO import DAO
 
@@ -9,6 +11,8 @@ class Model:
         self._idMap = {}
         for v in self._artObjectList:
             self._idMap[v.object_id] = v
+        self._solBest = []
+        self._pesoBest = 0
 
     def creaGrafo(self):
         self.addEdges()
@@ -58,12 +62,53 @@ class Model:
 
         return len(connComp)
 
+    def getBestPath(self, lun, v0):
+        self._solBest = []
+        self._pesoBest = 0
+
+        parziale = [v0]
+        for v in self._grafo.neighbors(v0):
+            if v.classification == v0.classification:
+                parziale.append(v)
+                self.ricorsione(parziale, lun)
+                parziale.pop()
+
+        return self._solBest, self._pesoBest
+
+
+    def ricorsione(self, parziale, lun):
+        # Controllo se parziale è una soluzione valida ed in caso se è migliore del best
+        if len(parziale) == lun:
+            if self.peso(parziale) > self._pesoBest:
+                self._pesoBest = self.peso(parziale)
+                self._solBest = copy.deepcopy(parziale)
+            return
+
+        # Se arrivo qui, allora len(parziale) < lun.
+        # Ciclo su tutti i nodi vicini all'ultimo nodo aggiunto a parziale.
+        for v in self._grafo.neighbors(parziale[-1]):
+            # v lo aggiungo se non è già in parziale e se ha la stessa classification di v0, nodo source.
+            if v.classification == parziale[0].classification and v not in parziale:
+                parziale.append(v)
+                self.ricorsione(parziale, lun)
+                parziale.pop()
+
+
+
+    def peso(self, listObject):
+        peso = 0
+        for i in range(0, len(listObject)-1):
+            peso += self._grafo[listObject[i]][listObject[i+1]]["weight"]
+        return peso
+
 
     def checkExistence(self, id):
         if id in self._idMap:
             return True
         return False
 
+    def getObjByID(self, idOggetto):
+        return self._idMap[idOggetto]
 
     def getNumNodes(self):
         return len(self._grafo.nodes)
