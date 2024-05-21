@@ -35,26 +35,29 @@ class Controller:
             self._view.txtOut.controls.append(ft.Text(f"Numero di vertici: {self._model.getNumNodes()}"))
             self._view.txtOut.controls.append(ft.Text(f"Numero di archi: {self._model.getNumEdges()}"))
             first, sec, third = self._model.getThreeMostWeight()
-            self._view.txtOut.controls.append(ft.Text(f"Arco da {first[0].Product_number} a {first[1].Product_number}, peso: {first[2]["weight"]}"))
-            self._view.txtOut.controls.append(
-                ft.Text(f"Arco da {sec[0].Product_number} a {sec[1].Product_number}, peso: {sec[2]["weight"]}"))
-            self._view.txtOut.controls.append(
-                ft.Text(f"Arco da {third[0].Product_number} a {third[1].Product_number}, peso: {third[2]["weight"]}"))
+            if first is None and sec is None and third is None:
+                self._view.txtOut.controls.append(ft.Text(
+                    f"Sono presenti meno di tre archi nel grafo :-("))
+            else:
+                self._view.txtOut.controls.append(ft.Text(f"Arco da {first[0].Product_number} a {first[1].Product_number}, peso: {first[2]["weight"]}"))
+                self._view.txtOut.controls.append(
+                    ft.Text(f"Arco da {sec[0].Product_number} a {sec[1].Product_number}, peso: {sec[2]["weight"]}"))
+                self._view.txtOut.controls.append(
+                    ft.Text(f"Arco da {third[0].Product_number} a {third[1].Product_number}, peso: {third[2]["weight"]}"))
+                ripetuti = set()
+                firstProduct = first[0].Product_number
+                secProduct = first[1].Product_number
+                lstFirstEdge = [firstProduct, secProduct]
+                lstSecEdge = [sec[0].Product_number, sec[1].Product_number]
+                lstThirdEdge = [third[0].Product_number, third[1].Product_number]
+                for number in lstFirstEdge:
+                    if number in lstThirdEdge or number in lstSecEdge:
+                        ripetuti.add(number)
+                for number in lstSecEdge:
+                    if number in lstThirdEdge:
+                        ripetuti.add(number)
 
-            ripetuti = set()
-            firstProduct = first[0].Product_number
-            secProduct = first[1].Product_number
-            lstFirstEdge = [firstProduct, secProduct]
-            lstSecEdge = [sec[0].Product_number, sec[1].Product_number]
-            lstThirdEdge = [third[0].Product_number, third[1].Product_number]
-            for number in lstFirstEdge:
-                if number in lstThirdEdge or number in lstSecEdge:
-                    ripetuti.add(number)
-            for number in lstSecEdge:
-                if number in lstThirdEdge:
-                    ripetuti.add(number)
-
-            self._view.txtOut.controls.append(ft.Text(f"I nodi ripetuti sono {[num for num in ripetuti]}"))
+                self._view.txtOut.controls.append(ft.Text(f"I nodi ripetuti sono {[num for num in ripetuti]}"))
 
 
 

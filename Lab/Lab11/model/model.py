@@ -36,7 +36,10 @@ class Model:
     def getThreeMostWeight(self):
         edges = self._graph.edges(data=True)
         edges_ordinati = sorted(edges, key=lambda x: x[2]["weight"], reverse=True)
-        return edges_ordinati[0], edges_ordinati[1], edges_ordinati[2]
+        if len(edges_ordinati) >=3:
+            return edges_ordinati[0], edges_ordinati[1], edges_ordinati[2]
+        else:
+            return None, None, None
 
 
 
