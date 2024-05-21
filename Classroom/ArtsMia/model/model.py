@@ -44,7 +44,6 @@ class Model:
 
         predecessors = nx.dfs_predecessors(self._grafo, v0)
         print(f'Metodo 1 (predecessors): {len(predecessors.values())}')
-
         # Modo 3: recupero direttamente l'albero di visita del DFS, e conto i nodi di questo albero
         tree: nx.DiGraph = nx.dfs_tree(self._grafo, v0)
         print(f'Metodo 3 (tree): {len(tree.nodes)}')
