@@ -30,9 +30,11 @@ class Controller:
         self._view.lst_result.controls.append(ft.Text(f'Il grafo ha {nNodes} nodi'))
         self._view.lst_result.controls.append(ft.Text(f'Il grafo ha {nEdges} archi'))
 
-        for a in archiPesoMaggiore:
-            self._view.lst_result.controls.append(ft.Text(f'{a[0]} - {a[1]} - Peso: {a[2]}'))
+        #for a in archiPesoMaggiore:
+        #    self._view.lst_result.controls.append(ft.Text(f'{a[0]} - {a[1]} - Peso: {a[2]}'))
 
+        self._view._btnCalcolaPercorso.disabled = False
+        self._view._btnCalcola.disabled = False
         self._view.update_page()
     def handleCercaRaggiungibili(self,e):
         visited = self._model.getDFSNodes(self._fermataPartenza)
@@ -41,6 +43,27 @@ class Controller:
                                                       f"{len(visited)} stazioni"))
         for v in visited:
             self._view.lst_result.controls.append(ft.Text(v))
+
+        self._view.update_page()
+
+    def handlePercorso(self,e):
+        self._view.lst_result.controls.clear()
+        v0 = self._fermataPartenza
+        v1 = self._fermataArrivo
+        if v0 is None or v1 is None:
+            self._view.lst_result.controls.append(ft.Text(f'Attenzione, selezionare le due fermate!'))
+            return
+
+        totTime, path = self._model.getBestPath(v0, v1)
+        if len(path) == 0:
+            self._view.lst_result.controls.append(ft.Text("Percorso non trovato!"))
+            return
+
+        self._view.lst_result.controls.append(ft.Text("Percorso trovato!"))
+        self._view.lst_result.controls.append(ft.Text(f"Il cammino più breve fra {v0} e {v1} impiega {totTime} minuti"))
+        for p in path:
+            self._view.lst_result.controls.append(ft.Text(f"{p}"))
+
 
         self._view.update_page()
 

@@ -1,5 +1,6 @@
 from Classroom.MetroParis.database.DAO import DAO
 import networkx as nx
+import geopy.distance
 
 class Model:
     def __init__(self):
@@ -8,6 +9,10 @@ class Model:
         self._idMap = {}
         for f in self._fermate:
             self._idMap[f.id_fermata] = f
+        self._linee = DAO.getAllLinee()
+        self._lineaMap = {}
+        for l in self._linee:
+            self._lineaMap[l.id_linea] = l
 
     def buildGraph(self):
         self._grafo.clear()
@@ -53,8 +58,9 @@ class Model:
     def buildGraphPesato(self):
         self._grafo.clear()
         self._grafo.add_nodes_from(self._fermate)
-        self.addEdgePesati()
+        self.addEdgePesatiTempo()
 
+    # Con il metodo sotto aggiungo gli archi pesati considerando come peso il numero di linee che collegano due stazioni
     def addEdgePesati(self):
         self._grafo.clear_edges()
         allConnessioni = DAO.getAllConnessioni()
@@ -67,6 +73,37 @@ class Model:
             else:
                 # se l'arco non è ancora stato aggiunto, lo aggiungo e imposto l'attributo weight pari a 1.
                 self._grafo.add_edge(self._idMap[c.id_stazP], self._idMap[c.id_stazA], weight = 1)
+
+    # Con questo metodo aggiungo gli archi pesati considerando come peso il tempo che viene impiegato per andare da una stazione ad un'altra
+    def addEdgePesatiTempo(self):
+        self._grafo.clear_edges()
+        allConnessioni = DAO.getAllConnessioni()
+        for c in allConnessioni:
+            v0 = self._idMap[c.id_stazP]
+            v1 = self._idMap[c.id_stazA]
+            linea = self._lineaMap[c.id_linea]
+            peso = self.getTraversalTime(v0,v1,linea)
+
+            if self._grafo.has_edge(v0, v1):
+                if self._grafo[v0][v1]["weight"] > peso:
+                    self._grafo[v0][v1]["weight"] = peso
+
+            else:
+                self._grafo.add_edge(v0,v1,weight=peso)
+
+
+    def getTraversalTime(self, v0,v1,linea):
+        vel = linea.velocita
+        p0 = (v0.coordX, v0.coordY)
+        p1 = (v1.coordX, v1.coordY)
+        dist = geopy.distance.distance(p0, p1).km
+        tempo = dist/vel * 60 # in minuti
+        return tempo
+
+    def getBestPath(self, v0, v1):
+        costoTot, path = nx.single_source_dijkstra(self._grafo, source=v0, target=v1)
+        return costoTot, path
+
 
     # Metodo per implementare un algoritmo di tipo BFS per visitare il nostro grafo
     def getBFSNodes(self, source):

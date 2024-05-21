@@ -1,6 +1,7 @@
 from Classroom.MetroParis.database.DB_connect import DBConnect
 from Classroom.MetroParis.model.fermata import Fermata
 from Classroom.MetroParis.model.connessione import Connessione
+from Classroom.MetroParis.model.linea import Linea
 
 class DAO():
 
@@ -66,6 +67,22 @@ class DAO():
 
         for row in cursor:
             result.append(Connessione(row['id_connessione'], row['id_linea'], row['id_stazP'], row['id_stazA']))
+        cursor.close()
+        conn.close()
+        return result
+
+    @staticmethod
+    def getAllLinee():
+        conn = DBConnect.get_connection()
+
+        result = []
+
+        cursor = conn.cursor(dictionary=True)
+        query = "SELECT * FROM linea"
+        cursor.execute(query)
+
+        for row in cursor:
+            result.append(Linea(**row))
         cursor.close()
         conn.close()
         return result
