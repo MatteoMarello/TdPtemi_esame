@@ -21,9 +21,23 @@ class View(ft.UserControl):
         self._page.controls.append(self._title)
 
         self._txtInNumC = ft.TextField(label="Numeri compagnie", width=250)
+        self._btnAnalizza = ft.ElevatedButton(on_click=self._controller.handleAnalizza, text="Analizza Aeroporti")
+        self._btnConnessi = ft.ElevatedButton(text="Aeroporti Connessi", on_click=self._controller.handleConnessi)
 
+        row1 = ft.Row(controls=[self._txtInNumC, self._btnAnalizza, self._btnConnessi], alignment=ft.MainAxisAlignment.CENTER)
 
+        self._page.add(row1)
 
+        self._ddAeroportoP = ft.Dropdown(label="Partenza")
+        self._ddAeroportoA = ft.Dropdown(label="Arrivo")
+        row2 = ft.Row(controls=[self._ddAeroportoP, self._ddAeroportoA], alignment=ft.MainAxisAlignment.CENTER)
+        self._page.add(row2)
+
+        self._txtInNumTratte = ft.TextField(label="Numero tratte Max", width=250)
+        self._btnCercaItinerario = ft.ElevatedButton(text='Cerca Itinerario', on_click=self._controller.handleCercaItinerario)
+
+        row3 = ft.Row(controls=[self._txtInNumTratte, self._btnCercaItinerario], alignment=ft.MainAxisAlignment.CENTER)
+        self._page.add(row3)
 
         # List View where the reply is printed
         self.txt_result = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
