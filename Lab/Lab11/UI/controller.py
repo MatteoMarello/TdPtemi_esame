@@ -12,6 +12,7 @@ class Controller:
         self._listYear = []
         self._listColor = []
 
+
     def fillDD(self):
         self._view._ddyear.options.append(ft.dropdown.Option("2015"))
         self._view._ddyear.options.append(ft.dropdown.Option("2016"))
@@ -61,15 +62,35 @@ class Controller:
 
 
 
-
+        self.fillDDProduct()
 
         self._view.update_page()
 
 
 
     def fillDDProduct(self):
-        pass
+        self._view._ddnode.options.clear()
+        for node in self._model._graph.nodes:
+            self._view._ddnode.options.append(ft.dropdown.Option(text=node.Product_number,
+                                                                 data=node,
+                                                                 on_click=self.readProduct))
+
+
+
+    def readProduct(self,e):
+        if e.control.data is None:
+            self._productDD = None
+        else:
+            self._productDD = e.control.data
+
 
 
     def handle_search(self, e):
-        pass
+        self._view.txtOut2.controls.clear()
+        if self._productDD is None:
+            self._view.txtOut2.controls.append(ft.Text("Devi prima selezionare un prodotto dal menù a tendina!"))
+        else:
+            lunghezzaPercorso = self._model.getPercorsoPiuLungo(self._productDD)
+            self._view.txtOut2.controls.append(ft.Text(f'Numero archi percorso più lungo: {lunghezzaPercorso}'))
+
+        self._view.update_page()
