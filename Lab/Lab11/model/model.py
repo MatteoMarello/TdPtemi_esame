@@ -30,28 +30,37 @@ class Model:
 
     def getPercorsoPiuLungo(self, prodottoPartenza):
         self._camminoMigliore = []
+        edges=[]
         self._solMigliore = 0
         parziale = [prodottoPartenza]
         for n in self._graph.neighbors(prodottoPartenza):
             parziale.append(n)
-            self.ricorsione(parziale)
+            edges.append((prodottoPartenza,n))
+            self.ricorsione(parziale, edges)
             parziale.pop()
+            edges.pop()
+
         return self._solMigliore
 
-    def ricorsione(self, parziale):
-        if len(parziale) > self._solMigliore:
-            self._solMigliore = len(parziale)
-
-        if self._graph[parziale[-1]][parziale[-2]]["weight"] == self._mostWeightEdge:
-            return
+    def ricorsione(self, parziale, edges):
+        if len(edges) > self._solMigliore:
+            self._solMigliore = len(edges)
 
         for product in self._graph.neighbors(parziale[-1]):
-            if product not in parziale\
-            and self._graph[parziale[-1]][product]["weight"] >= self._graph[parziale[-1]][parziale[-2]]["weight"]:
-                parziale.append(product)
-                self.ricorsione(parziale)
-                parziale.pop()
+            if not self.edgeConsiderato(edges, parziale[-1], product):
+                if self._graph[parziale[-1]][product]["weight"] >= self._graph[parziale[-1]][parziale[-2]]["weight"]:
+                    edges.append((parziale[-1], product))
+                    parziale.append(product)
+                    print(edges)
+                    self.ricorsione(parziale, edges)
+                    edges.pop()
+                    parziale.pop()
 
+    def edgeConsiderato(self, edges, nodo1, nodo2):
+        if (nodo1, nodo2) in edges or (nodo2, nodo1) in edges:
+            return True
+        else:
+            return False
 
     def getColors(self):
         colors = DAO.getColors()
