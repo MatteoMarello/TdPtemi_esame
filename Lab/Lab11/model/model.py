@@ -1,5 +1,3 @@
-import copy
-
 import networkx as nx
 
 from Lab.Lab11.database.DAO import DAO
@@ -46,12 +44,14 @@ class Model:
         if len(edges) > self._solMigliore:
             self._solMigliore = len(edges)
 
+        if self._graph[parziale[-1]][parziale[-2]]["weight"] == self.getMostWeightEdge():
+            return
+
         for product in self._graph.neighbors(parziale[-1]):
             if not self.edgeConsiderato(edges, parziale[-1], product):
                 if self._graph[parziale[-1]][product]["weight"] >= self._graph[parziale[-1]][parziale[-2]]["weight"]:
                     edges.append((parziale[-1], product))
                     parziale.append(product)
-                    print(edges)
                     self.ricorsione(parziale, edges)
                     edges.pop()
                     parziale.pop()
