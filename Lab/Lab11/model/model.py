@@ -27,40 +27,59 @@ class Model:
         self._mostWeightEdge = self.getMostWeightEdge()
 
     def getPercorsoPiuLungo(self, prodottoPartenza):
+        arcoPiuCostoso = self.getMostWeightEdge()
         self._camminoMigliore = []
-        edges=[]
+        edges = set()
         self._solMigliore = 0
         parziale = [prodottoPartenza]
         for n in self._graph.neighbors(prodottoPartenza):
             parziale.append(n)
-            edges.append((prodottoPartenza,n))
-            self.ricorsione(parziale, edges)
+            edges.add((prodottoPartenza,n))
+            self.ricorsione(parziale, edges, arcoPiuCostoso)
             parziale.pop()
-            edges.pop()
+            edges.remove((prodottoPartenza, n))
 
         return self._solMigliore
 
-    def ricorsione(self, parziale, edges):
+    def ricorsione(self, parziale, edges, arcoPiuCostoso):
         if len(edges) > self._solMigliore:
             self._solMigliore = len(edges)
 
-        if self._graph[parziale[-1]][parziale[-2]]["weight"] == self.getMostWeightEdge():
+        if self._graph[parziale[-1]][parziale[-2]]["weight"] == arcoPiuCostoso:
+            return
+
+        if self.uscita(parziale, parziale[-1]):
             return
 
         for product in self._graph.neighbors(parziale[-1]):
             if not self.edgeConsiderato(edges, parziale[-1], product):
                 if self._graph[parziale[-1]][product]["weight"] >= self._graph[parziale[-1]][parziale[-2]]["weight"]:
-                    edges.append((parziale[-1], product))
+                    edges.add((parziale[-1], product))
                     parziale.append(product)
-                    self.ricorsione(parziale, edges)
-                    edges.pop()
+                    self.ricorsione(parziale, edges, arcoPiuCostoso)
+                    edges.remove((parziale[-2], parziale[-1]))
                     parziale.pop()
+
+    def getMostWeightEdge(self):
+        edges = self._graph.edges(data=True)
+        edges_ordinati = sorted(edges, key=lambda x: x[2]["weight"], reverse=True)
+        if len(edges_ordinati) >= 1:
+            return edges_ordinati[0][2]["weight"]
+        else:
+            return None
 
     def edgeConsiderato(self, edges, nodo1, nodo2):
         if (nodo1, nodo2) in edges or (nodo2, nodo1) in edges:
             return True
         else:
             return False
+
+    def uscita(self, path, current):
+        archi = [(current, neighbor) for neighbor in self._graph[current].keys()]
+        for arco in archi:
+            if self._graph[arco[0]][arco[1]]["weight"] > self._graph[path[-2]][path[-1]]['weight']:
+                return False
+        return True
 
     def getColors(self):
         colors = DAO.getColors()
@@ -80,13 +99,7 @@ class Model:
         else:
             return None, None, None
 
-    def getMostWeightEdge(self):
-        edges = self._graph.edges(data=True)
-        edges_ordinati = sorted(edges, key=lambda x: x[2]["weight"], reverse=True)
-        if len(edges_ordinati) >= 1:
-            return edges_ordinati[0][2]["weight"]
-        else:
-            return None
+
 
 
 if __name__ == "__main__":

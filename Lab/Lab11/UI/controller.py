@@ -1,3 +1,5 @@
+import time
+
 import flet as ft
 
 from Lab.Lab11.UI.view import View
@@ -90,7 +92,10 @@ class Controller:
         if self._productDD is None:
             self._view.txtOut2.controls.append(ft.Text("Devi prima selezionare un prodotto dal menù a tendina!"))
         else:
+            start_time = time.time()
             lunghezzaPercorso = self._model.getPercorsoPiuLungo(self._productDD)
+            end_time = time.time()
             self._view.txtOut2.controls.append(ft.Text(f'Numero archi percorso più lungo: {lunghezzaPercorso}'))
+            self._view.txtOut2.controls.append(ft.Text(f'Elapsed time: {end_time-start_time}'))
 
         self._view.update_page()
