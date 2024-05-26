@@ -77,7 +77,7 @@ class Model:
     def uscita(self, path, current):
         archi = [(current, neighbor) for neighbor in self._graph[current].keys()]
         for arco in archi:
-            if self._graph[arco[0]][arco[1]]["weight"] > self._graph[path[-2]][path[-1]]['weight']:
+            if self._graph[arco[0]][arco[1]]["weight"] >= self._graph[path[-2]][path[-1]]['weight']:
                 return False
         return True
 
