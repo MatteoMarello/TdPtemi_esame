@@ -50,26 +50,22 @@ class Model:
         self.bestPath.clear()
         edges = []
         nodes = []
-        for n in self.graph.nodes:
+        nodiNonIsolati = [n for n in self.graph.nodes if self.graph.degree[n] > 0]
+
+        for n in nodiNonIsolati:
             nodes.append(n)
             self.ricorsione(l, nodes, edges)
             nodes.pop()
 
-        print(self.bestPath)
-        print(self.bestWeight)
-        for edge in self.bestPath:
-            print(f"{edge[0]} --> {edge[1]}, peso: {self.graph[edge[0]][edge[1]]["weight"]}")
+        return self.bestWeight, self.bestPath
 
 
     def ricorsione(self, l, nodes, edges):
         if len(edges) == l:
-            if nodes[0] != nodes[-1]:
-                return
-            else:
-                peso = self.getWeightEdges(edges)
-                if peso > self.bestWeight:
-                    self.bestWeight = peso
-                    self.bestPath = copy.deepcopy(edges)
+            peso = self.getWeightEdges(edges)
+            if peso > self.bestWeight:
+                self.bestWeight = peso
+                self.bestPath = copy.deepcopy(edges)
 
         else:
             current_node = nodes[-1]

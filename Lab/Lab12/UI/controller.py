@@ -54,6 +54,7 @@ class Controller:
 
 
     def handle_path(self, e):
+        self._view.txtOut3.controls.clear()
         lun = self._view.txtN.value
         try:
             intLun = int(lun)
@@ -61,9 +62,12 @@ class Controller:
                 self._view.txtOut3.controls.append(ft.Text("Devi inserire un numero almeno pari a 2!"))
             else:
                 start_time = time.time()
-                self._model.getPercorso(intLun)
+                weight, path = self._model.getPercorso(intLun)
                 end_time = time.time()
-                self._view.txtOut3.controls.append(ft.Text(f"Elapsed time: {round(end_time-start_time,2)} secondi"))
+                self._view.txtOut3.controls.append(ft.Text(f"Elapsed time: {round(end_time-start_time, 2)} secondi"))
+                self._view.txtOut3.controls.append(ft.Text(f"Peso cammino massimo: {weight}"))
+                for edge in path:
+                    self._view.txtOut3.controls.append(ft.Text(f"{edge[0]} --> {edge[1]} -- Peso: {self._model.graph[edge[0]][edge[1]]["weight"]}"))
 
         except ValueError:
             self._view.txtOut3.controls.append(ft.Text("Devi inserire un numero intero!"))

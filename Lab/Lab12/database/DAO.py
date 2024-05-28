@@ -49,6 +49,7 @@ class DAO():
         query = """ SELECT gds2.Retailer_code as r1, gds.Retailer_code as r2, COUNT(DISTINCT gds.Product_number) as peso 
                     from go_daily_sales gds, go_daily_sales gds2, go_retailers gr, go_retailers gr2  
                     WHERE YEAR (gds.`Date`) = %s
+                    AND YEAR (gds2. `Date`) = %s
                     AND gr.Retailer_code = gds2.Retailer_code 
                     AND gr2.Retailer_code = gds.Retailer_code
                     and gr2.Country = %s
@@ -57,7 +58,7 @@ class DAO():
                     AND gds2.Product_number = gds.Product_number
                     GROUP BY gds2.Retailer_code, gds.Retailer_code
                     """
-        cursor.execute(query, (year, country, country))
+        cursor.execute(query, (year, year, country, country))
 
         for row in cursor:
             result.append(Connessione(idMap[row["r1"]], idMap[row["r2"]], row["peso"]))
