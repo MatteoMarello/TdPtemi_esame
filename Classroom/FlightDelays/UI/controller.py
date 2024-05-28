@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import flet as ft
 from Classroom.FlightDelays.model.model import Model
 from Classroom.FlightDelays.UI.view import View
@@ -45,9 +47,43 @@ class Controller:
 
         self._view.update_page()
 
+    def handleTestConnessione(self, e):
+        self._view._txt_result.controls.clear()
+        v0 = self._choiceAeroportoP
+        v1 = self._choiceAeroportoA
+
+        # Verificare che ci sia un percorso
+        if not self._model.esistePercorso(v0, v1):
+            self._view._txt_result.controls.append(ft.Text(f"Non esiste un percorso fra {v0} e {v1}."))
+            return
+        else:
+            self._view._txt_result.controls.append(ft.Text(f"Percorso fra {v0} e {v1} trovato."))
+
+        # Trovare un possibile percorso
+        path = self._model.trovaCamminoBFS(v0, v1)
+        self._view._txt_result.controls.append(ft.Text(f"Il cammino con minor numero di archi fra {v0} e {v1} è:"))
+        for v in path:
+            self._view._txt_result.controls.append(ft.Text(f"{v}"))
+
+        self._view.update_page()
+
 
     def handleCercaItinerario(self, e):
-        pass
+        v0 = self._choiceAeroportoP
+        v1 = self._choiceAeroportoA
+        t = int(self._view._txtInNumTratte.value)
+
+        tic = datetime.now()
+        path, peso = self._model.getCamminoOttimo(v0, v1, t)
+        self._view._txt_result.controls.clear()
+        self._view._txt_result.controls.append(ft.Text(F"Il percorso ottimo fra {v0} e {v1} è: "))
+        for p in path:
+            self._view._txt_result.controls.append(ft.Text(f"{p}"))
+
+        self._view._txt_result.controls.append(ft.Text(f"Peso totale del percorso: {peso}"))
+        self._view._txt_result.controls.append(ft.Text(f"Tempo impiegato per la ricerca: {datetime.now() - tic} secondi"))
+        self._view.update_page()
+
 
     def fillDD(self):
         allNodes = self._model.getAllNodes()

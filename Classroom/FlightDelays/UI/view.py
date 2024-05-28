@@ -33,9 +33,10 @@ class View(ft.UserControl):
         self._page.add(row2)
 
         self._txtInNumTratte = ft.TextField(label="Numero tratte Max", width=250)
+        self._btnTestConnessione = ft.ElevatedButton(text="Test Connessione", on_click=self._controller.handleTestConnessione)
         self._btnCercaItinerario = ft.ElevatedButton(text='Cerca Itinerario', on_click=self._controller.handleCercaItinerario)
 
-        row3 = ft.Row(controls=[self._txtInNumTratte, self._btnCercaItinerario], alignment=ft.MainAxisAlignment.CENTER)
+        row3 = ft.Row(controls=[self._txtInNumTratte, self._btnTestConnessione, self._btnCercaItinerario], alignment=ft.MainAxisAlignment.CENTER)
         self._page.add(row3)
 
         # List View where the reply is printed
