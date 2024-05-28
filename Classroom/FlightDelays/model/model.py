@@ -30,14 +30,15 @@ class Model:
         # Verificare se parziale è meglio di best
         # t è il numero di archi, ma dato che in parziale aggiungo i nodi, impongo len(parziale) == t+1 come condizione di terminazione.
 
-        if parziale[-1] == target and self.getObjFun(parziale) > self._bestObjFun:
-            self._bestObjFun = self.getObjFun(parziale)
-            self._bestPath = copy.deepcopy(parziale)
-            return
-
         if len(parziale) == t + 1:
             # Esco
             return
+
+        if parziale[-1] == target and self.getObjFun(parziale) > self._bestObjFun:
+            self._bestObjFun = self.getObjFun(parziale)
+            self._bestPath = copy.deepcopy(parziale)
+
+
         # Posso ancora aggiungere nodi
         # Prendo i vicini e provo ad aggiungere
         # Ricorsione
