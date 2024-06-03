@@ -29,7 +29,7 @@ class Model:
         self._ricorsioneV2(parziale)
         parziale.pop()
 
-        return self._bestPath
+        return self.getWeightsOfPath(self._bestPath)
 
     def _ricorsione(self, parziale):
         if self._getScore(parziale) > self._bestObjVal:
@@ -57,7 +57,7 @@ class Model:
         for v1 in listaVicini:
             if v1[0] not in parziale and self.grafo[parziale[-2]][parziale[-1]]["weight"] > v1[1]:
                 parziale.append(v1[0])
-                self._ricorsione(parziale)
+                self._ricorsioneV2(parziale)
                 parziale.pop()
                 # se entro nell'if posso mettere il return perchè sicuramente questo caso mi garantiscela soluzione migliore
                 # perchè la soluzione migliore è quella che mi ordina tutti gli archi possibili in ordine decrescente di peso.
@@ -102,6 +102,13 @@ class Model:
             # L'arco fra due squadre corrisponde alla somma dei salari dei giocatori che hanno giocato per le due squadre nell'anno indicato.
             self.grafo[e[0]][e[1]]["weight"] = salariesOfTeams[e[0]] + salariesOfTeams[e[1]]
 
+    def getWeightsOfPath(self, path):
+        listTuples = [(path[0], 0)]
+        for i in range(0, len(path)-1):
+            listTuples.append( (path[i+1], self.grafo[path[i]][path[i+1]]["weight"]) )
+
+        return listTuples
+
     def getSortedNeighbors(self, v0):
         vicini = self.grafo.neighbors(v0)
         viciniTuple = []
@@ -131,10 +138,10 @@ if __name__ == "__main__":
     model.getTeamsOfYear(2015)
     model.buildGraph(2015)
     model.printGraphDetails()
-    v0 = list(model.grafo.nodes)[10]
+    v0 = list(model.grafo.nodes)[2]
     vicini = model.getSortedNeighbors(v0)
     for v in vicini:
         print(f"{v[1]} -> {v[0]}")
 
     path = model.getPercorso(v0)
-    print(path)
+    print(len(path))

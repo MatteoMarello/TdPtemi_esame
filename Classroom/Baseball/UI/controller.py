@@ -1,3 +1,5 @@
+import warnings
+
 import flet as ft
 from Classroom.Baseball.model.model import Model
 from Classroom.Baseball.UI.view import View
@@ -46,7 +48,18 @@ class Controller:
         self._view.update_page()
 
     def handlePercorso(self, e):
-        pass
+        self._view._txt_result.controls.clear()
+        if self.selectedTeam is None:
+            warnings.warn("Squadra non selezionata!")
+            self._view._txt_result.controls.append(ft.Text(f'Squadra non selezionata!'))
+
+        else:
+            path = self._model.getPercorso(self.selectedTeam)
+            self._view._txt_result.controls.append(ft.Text("Percorso trovato!"))
+            for p in path:
+                self._view._txt_result.controls.append(ft.Text(f"{p[0]} -- {p[1]}"))
+
+        self._view.update_page()
 
     def fillDDYear(self):
         years = self._model.getYears()
