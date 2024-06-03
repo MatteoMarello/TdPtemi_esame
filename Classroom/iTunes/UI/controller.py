@@ -1,8 +1,11 @@
-import flet as ft
+import this
 
+import flet as ft
+from Classroom.iTunes.model.model import Model
+from Classroom.iTunes.UI.view import View
 
 class Controller:
-    def __init__(self, view, model):
+    def __init__(self, view: View, model: Model):
         # the view, with the graphical elements of the UI
         self._view = view
         # the model, which implements the logic of the program and holds the data
