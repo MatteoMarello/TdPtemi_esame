@@ -11,6 +11,7 @@ class Controller:
         self._view = view
         # the model, which implements the logic of the program and holds the data
         self._model = model
+        self._choiceAlbum = None
 
     def handleCreaGrafo(self, e):
         self._view.txt_result.controls.clear()
@@ -61,4 +62,26 @@ class Controller:
             return
 
     def handleGetSetAlbum(self, e):
-        pass
+        self._view.txt_result.controls.clear()
+        dTOTtxt = self._view._txtInSoglia.value
+        try:
+            dTOT = int(dTOTtxt)
+        except ValueError:
+            warnings.warn("Soglia not integer")
+            self._view.txt_result.controls.append(ft.Text("Soglia inserita non valida!"))
+            self._view.update_page()
+            return
+
+        if self._choiceAlbum is None:
+            warnings.warn("Attennzione, album non selezionato!")
+            self._view.txt_result.controls.append(ft.Text("Selezionare un album."))
+            self._view.update_page()
+            return
+
+        setAlbum, durataTot = self._model.getSetAlbum(self._choiceAlbum, dTOT)
+        self._view.txt_result.controls.append(ft.Text("Set di album ottimo trovato!"))
+        self._view.txt_result.controls.append(ft.Text(f"Durata totale degli album: {durataTot}"))
+        for s in setAlbum:
+            self._view.txt_result.controls.append(ft.Text(f"{s}"))
+
+        self._view.update_page()
