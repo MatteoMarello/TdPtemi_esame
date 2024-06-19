@@ -1,4 +1,4 @@
-from Esami.cinquegiugnodiciannove.database.DB_connect import DBConnect
+from Esami.Duemiladiciannove.cinque_giugno.database.DB_connect import DBConnect
 
 
 class DAO():
