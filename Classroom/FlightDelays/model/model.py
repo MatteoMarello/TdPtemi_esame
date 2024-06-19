@@ -163,6 +163,7 @@ if __name__ == "__main__":
     pathBFS = model.trovaCamminoBFS(v0,v1)
     pathDFS = model.trovaCamminoDFS(v0,v1)
 
+    print('-------------------')
     print("Dijkstra:")
     print(*pathD, sep=" \n")
     print('-------------------')

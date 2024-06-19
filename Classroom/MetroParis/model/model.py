@@ -159,4 +159,7 @@ if __name__ == "__main__":
     mymodel.buildGraph()
     print(f'The graph has {mymodel.getNumNodes()} nodes.')
     print(f'The graph has {mymodel.getNumEdges()} edges.')
+    f = mymodel.fermate[0]
+    print(mymodel.getBFSNodes(f))
+    print(mymodel.getDFSNodes(f))
 
