@@ -14,60 +14,29 @@ class View(ft.UserControl):
         # graphical elements
         self._title = None
 
-        self.ddyear = None
-        self.ddcountry = None
-        self.txtN = None
-
-        self.btn_graph = None
-        self.btn_volume = None
-        self.btn_path = None
-
-        self.txt_result = None
-        self.txtOut2 = None
-        self.txtOut3 = None
-
-        self.txt_container = None
 
     def load_interface(self):
         # title
-        self._title = ft.Text("TdP 2024 - Lab12: Prova tema d'esame", color="blue", size=24)
+        self._title = ft.Text("TdP 2024 - Esame 3/6/24", color="green", size=24)
         self._page.controls.append(self._title)
 
         #ROW with some controls
-        self.ddyear = ft.Dropdown(label="Anno")
-        self.ddcountry= ft.Dropdown(label="Nazione")
+        self.txtInGoal = ft.TextField(label="Goal fatti", width=300)
+        self.btnCreaGrafo = ft.ElevatedButton(text="Crea Grafo", width=200, on_click=self._controller.handleCreaGrafo)
+        row1 = ft.Row([self.txtInGoal, self.btnCreaGrafo], alignment=ft.MainAxisAlignment.CENTER)
 
-        self.btn_graph = ft.ElevatedButton(text="Crea Grafo", on_click=self._controller.handle_graph)
+        self.btnTopPlayer = ft.ElevatedButton(text="Top Player", width=500, on_click=self._controller.handleToplPlayer)
+        row2 = ft.Row([self.btnTopPlayer], alignment=ft.MainAxisAlignment.CENTER)
 
-        row1 = ft.Row([self.ddyear, self.ddcountry, self.btn_graph],
-                      alignment=ft.MainAxisAlignment.CENTER)
-        self._page.controls.append(row1)
-        self._controller.fillDD()
+        self.txtInGiocatori = ft.TextField(label="Giocatori", width=300)
+        self.btnDreamTeam = ft.ElevatedButton(text="Dream Team", width=200, on_click=self._controller.handleDreamTeam)
+        row3 = ft.Row([self.txtInGiocatori, self.btnDreamTeam], alignment=ft.MainAxisAlignment.CENTER)
 
-        # List View where the reply is printed
-        self.txt_result = ft.ListView(expand=0, spacing=5, padding=5, auto_scroll=True)
-        self._page.controls.append(self.txt_result)
-        self._page.update()
+        self._page.add(row1, row2, row3)
 
 
-        self.btn_volume = ft.ElevatedButton(text="Calcola Volumi", on_click=self._controller.handle_volume)
-        row2 = ft.Row([self.btn_volume],
-                      alignment=ft.MainAxisAlignment.CENTER)
-        self._page.controls.append(row2)
-
-        self.txtOut2 = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
-        self._page.controls.append(self.txtOut2)
-        self._page.update()
-
-        self.txtN = ft.TextField(label="Lunghezza percorso")
-        self.btn_path = ft.ElevatedButton(text="Calcola percorso", on_click=self._controller.handle_path)
-
-        row3 = ft.Row([self.txtN, self.btn_path],
-                      alignment=ft.MainAxisAlignment.CENTER)
-        self._page.controls.append(row3)
-
-        self.txtOut3 = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
-        self._page.controls.append(self.txtOut3)
+        self.txtOut = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
+        self._page.controls.append(self.txtOut)
         self._page.update()
 
     @property
