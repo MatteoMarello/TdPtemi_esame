@@ -14,60 +14,33 @@ class View(ft.UserControl):
         # graphical elements
         self._title = None
 
-        self.ddyear = None
-        self.ddcountry = None
-        self.txtN = None
-
-        self.btn_graph = None
-        self.btn_volume = None
-        self.btn_path = None
-
-        self.txt_result = None
-        self.txtOut2 = None
-        self.txtOut3 = None
-
-        self.txt_container = None
 
     def load_interface(self):
         # title
-        self._title = ft.Text("TdP 2024 - Lab12: Prova tema d'esame", color="blue", size=24)
+        self._title = ft.Text("TdP 2024 - Esame 2/11/2022", color="blue", size=24)
         self._page.controls.append(self._title)
 
-        #ROW with some controls
-        self.ddyear = ft.Dropdown(label="Anno")
-        self.ddcountry= ft.Dropdown(label="Nazione")
-
-        self.btn_graph = ft.ElevatedButton(text="Crea Grafo", on_click=self._controller.handle_graph)
-
-        row1 = ft.Row([self.ddyear, self.ddcountry, self.btn_graph],
-                      alignment=ft.MainAxisAlignment.CENTER)
-        self._page.controls.append(row1)
+        self.ddGenere = ft.Dropdown(label="Genere", width=500)
         self._controller.fillDD()
+        row1 = ft.Row([self.ddGenere], alignment=ft.MainAxisAlignment.CENTER)
 
-        # List View where the reply is printed
-        self.txt_result = ft.ListView(expand=0, spacing=5, padding=5, auto_scroll=True)
-        self._page.controls.append(self.txt_result)
-        self._page.update()
+        self.txtInMin = ft.TextField(label="Min", width=250)
+        self.txtInMax = ft.TextField(label="Max", width=250)
+        row2 = ft.Row([self.txtInMin, self.txtInMax], alignment=ft.MainAxisAlignment.CENTER)
+
+        self.btnCreaGrafo = ft.ElevatedButton(text="Crea Grafo", width=500, on_click=self._controller.handleGrafo)
+        row3 = ft.Row([self.btnCreaGrafo], alignment=ft.MainAxisAlignment.CENTER)
+
+        self.txtInD = ft.TextField(label="dTOT", width=250)
+        self.btnPlaylist = ft.ElevatedButton(text="La mia Playlist", width=250, on_click=self._controller.handlePlaylist)
+        row4 = ft.Row([self.txtInD, self.btnPlaylist], alignment=ft.MainAxisAlignment.CENTER)
+
+        self._page.add(row1, row2, row3, row4)
 
 
-        self.btn_volume = ft.ElevatedButton(text="Calcola Volumi", on_click=self._controller.handle_volume)
-        row2 = ft.Row([self.btn_volume],
-                      alignment=ft.MainAxisAlignment.CENTER)
-        self._page.controls.append(row2)
 
-        self.txtOut2 = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
-        self._page.controls.append(self.txtOut2)
-        self._page.update()
-
-        self.txtN = ft.TextField(label="Lunghezza percorso")
-        self.btn_path = ft.ElevatedButton(text="Calcola percorso", on_click=self._controller.handle_path)
-
-        row3 = ft.Row([self.txtN, self.btn_path],
-                      alignment=ft.MainAxisAlignment.CENTER)
-        self._page.controls.append(row3)
-
-        self.txtOut3 = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
-        self._page.controls.append(self.txtOut3)
+        self.txtOut = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
+        self._page.controls.append(self.txtOut)
         self._page.update()
 
     @property
