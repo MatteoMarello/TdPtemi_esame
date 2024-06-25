@@ -34,40 +34,26 @@ class View(ft.UserControl):
         self._page.controls.append(self._title)
 
         #ROW with some controls
-        self.ddyear = ft.Dropdown(label="Anno")
-        self.ddcountry= ft.Dropdown(label="Nazione")
+        self.txtInNCanzoni = ft.TextField(label="Canzoni", width=300)
+        self.btnGrafo = ft.ElevatedButton(text="Crea Grafo", width=200, on_click=self._controller.handleGrafo)
+        row1 = ft.Row([self.txtInNCanzoni, self.btnGrafo], alignment=ft.MainAxisAlignment.CENTER)
+        self._page.add(row1)
 
-        self.btn_graph = ft.ElevatedButton(text="Crea Grafo", on_click=self._controller.handle_graph)
+        self.ddA1 = ft.Dropdown(label="Album a1", width=300)
+        self.btnAdiacenze = ft.ElevatedButton(text="Stampa Adiacenze", width=200, on_click=self._controller.handleStampaAdiacenze)
+        row2=ft.Row([self.ddA1, self.btnAdiacenze], alignment=ft.MainAxisAlignment.CENTER)
 
-        row1 = ft.Row([self.ddyear, self.ddcountry, self.btn_graph],
-                      alignment=ft.MainAxisAlignment.CENTER)
-        self._page.controls.append(row1)
-        self._controller.fillDD()
+        self.ddA2 = ft.Dropdown(label="Album a2", width=300)
+        self.btnPercorso = ft.ElevatedButton(text="Calcola Percorso", width=200, on_click=self._controller.handlePercorso)
+        row3 = ft.Row([self.ddA2, self.btnPercorso], alignment=ft.MainAxisAlignment.CENTER)
 
-        # List View where the reply is printed
-        self.txt_result = ft.ListView(expand=0, spacing=5, padding=5, auto_scroll=True)
-        self._page.controls.append(self.txt_result)
-        self._page.update()
+        self.txtInSoglia = ft.TextField(label="Soglia", width=500)
+        row4 = ft.Row([self.txtInSoglia], alignment=ft.MainAxisAlignment.CENTER)
 
+        self._page.add(row2,row3,row4)
 
-        self.btn_volume = ft.ElevatedButton(text="Calcola Volumi", on_click=self._controller.handle_volume)
-        row2 = ft.Row([self.btn_volume],
-                      alignment=ft.MainAxisAlignment.CENTER)
-        self._page.controls.append(row2)
-
-        self.txtOut2 = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
-        self._page.controls.append(self.txtOut2)
-        self._page.update()
-
-        self.txtN = ft.TextField(label="Lunghezza percorso")
-        self.btn_path = ft.ElevatedButton(text="Calcola percorso", on_click=self._controller.handle_path)
-
-        row3 = ft.Row([self.txtN, self.btn_path],
-                      alignment=ft.MainAxisAlignment.CENTER)
-        self._page.controls.append(row3)
-
-        self.txtOut3 = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
-        self._page.controls.append(self.txtOut3)
+        self.txtOut = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
+        self._page.controls.append(self.txtOut)
         self._page.update()
 
     @property
