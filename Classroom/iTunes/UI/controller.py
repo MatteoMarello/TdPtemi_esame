@@ -1,4 +1,5 @@
 import this
+import time
 import warnings
 
 import flet as ft
@@ -78,7 +79,10 @@ class Controller:
             self._view.update_page()
             return
 
+        start_time = time.time()
         setAlbum, durataTot = self._model.getSetAlbum(self._choiceAlbum, dTOT)
+        end_time = time.time()
+        self._view.txt_result.controls.append(ft.Text(f"Elapsed time = {end_time-start_time}"))
         self._view.txt_result.controls.append(ft.Text("Set di album ottimo trovato!"))
         self._view.txt_result.controls.append(ft.Text(f"Durata totale degli album: {durataTot}"))
         for s in setAlbum:
