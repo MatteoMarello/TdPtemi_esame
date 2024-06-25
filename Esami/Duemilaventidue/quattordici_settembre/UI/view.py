@@ -30,44 +30,43 @@ class View(ft.UserControl):
 
     def load_interface(self):
         # title
-        self._title = ft.Text("TdP 2024 - Lab12: Prova tema d'esame", color="blue", size=24)
+        self._title = ft.Text("TdP - Esame del 14/09/2022", color="red", size=24)
         self._page.controls.append(self._title)
 
-        #ROW with some controls
-        self.ddyear = ft.Dropdown(label="Anno")
-        self.ddcountry= ft.Dropdown(label="Nazione")
-
-        self.btn_graph = ft.ElevatedButton(text="Crea Grafo", on_click=self._controller.handle_graph)
-
-        row1 = ft.Row([self.ddyear, self.ddcountry, self.btn_graph],
-                      alignment=ft.MainAxisAlignment.CENTER)
+        #ROW1
+        self._txtInDurata = ft.TextField(label="Durata")
+        self._btnCreaGrafo = ft.ElevatedButton(text="Crea Grafo",
+                                               on_click=self._controller.handleCreaGrafo)
+        row1 = ft.Row([
+            ft.Container(self._txtInDurata, width=300),
+            ft.Container(self._btnCreaGrafo, width=300)
+        ], alignment=ft.MainAxisAlignment.CENTER)
         self._page.controls.append(row1)
-        self._controller.fillDD()
 
-        # List View where the reply is printed
-        self.txt_result = ft.ListView(expand=0, spacing=5, padding=5, auto_scroll=True)
-        self._page.controls.append(self.txt_result)
-        self._page.update()
+        #ROW2
+        self._ddAlbum = ft.Dropdown(label="Album")
+        self._btnAnalisiComp = ft.ElevatedButton(text = "Analisi Componente",
+                                                 on_click=self._controller.handleAnalisiComp)
 
-
-        self.btn_volume = ft.ElevatedButton(text="Calcola Volumi", on_click=self._controller.handle_volume)
-        row2 = ft.Row([self.btn_volume],
-                      alignment=ft.MainAxisAlignment.CENTER)
+        row2 = ft.Row([
+            ft.Container(self._ddAlbum, width=300),
+            ft.Container(self._btnAnalisiComp, width=300)
+        ], alignment=ft.MainAxisAlignment.CENTER)
         self._page.controls.append(row2)
 
-        self.txtOut2 = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
-        self._page.controls.append(self.txtOut2)
-        self._page.update()
-
-        self.txtN = ft.TextField(label="Lunghezza percorso")
-        self.btn_path = ft.ElevatedButton(text="Calcola percorso", on_click=self._controller.handle_path)
-
-        row3 = ft.Row([self.txtN, self.btn_path],
-                      alignment=ft.MainAxisAlignment.CENTER)
+        #ROW3
+        self._txtInSoglia = ft.TextField(label="Soglia")
+        self._btnSetAlbum = ft.ElevatedButton(text="Set di Album",
+                                               on_click=self._controller.handleGetSetAlbum)
+        row3 = ft.Row([
+            ft.Container(self._txtInSoglia, width=300),
+            ft.Container(self._btnSetAlbum, width=300)
+        ], alignment=ft.MainAxisAlignment.CENTER)
         self._page.controls.append(row3)
 
-        self.txtOut3 = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
-        self._page.controls.append(self.txtOut3)
+        # List View where the reply is printed
+        self.txt_result = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
+        self._page.controls.append(self.txt_result)
         self._page.update()
 
     @property
