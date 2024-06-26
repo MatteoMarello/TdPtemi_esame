@@ -62,7 +62,6 @@ class Model:
         sources = self.getNodesMostVicini()
         source = sources[random.randint(0, len(sources)-1)][0]
         if not nx.has_path(self._graph, source, target):
-            print(f"{source} e {target} non sono connessi")
             return [], source
 
         self._bestPath = []
