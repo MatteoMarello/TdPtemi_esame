@@ -3,7 +3,7 @@ import networkx as nx
 
 # 1. Se voglio ottenere il cammino minimo in termini di peso degli archi, posso usare i metodi di nx che implementano l'algoritmo di Djikstra.
 
-# 2. Se voglio ottenere il cammino minimo in termine di numero di archi posso utilizzare il metodo di networkX shortes_path()
+# 2. Se voglio ottenere il cammino minimo in termine di numero di archi posso utilizzare il metodo di networkX shortest_path()
 
 
 # Creiamo un grafo non pesato
