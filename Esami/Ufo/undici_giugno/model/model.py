@@ -23,7 +23,7 @@ class Model:
     def getSequenza(self, stato):
         self._sequenza = []
         parziale = [stato]
-        numeroNodiRaggiungibili = len(self.getStatiRaggiungibili(stato))
+        numeroNodiRaggiungibili = len(self.getStatiRaggiungibili(stato)) + 1
 
         self._ricorsione(parziale, numeroNodiRaggiungibili)
 
