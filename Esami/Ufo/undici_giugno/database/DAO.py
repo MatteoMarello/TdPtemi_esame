@@ -58,6 +58,7 @@ class DAO():
                     FROM sighting s , sighting s2 
                     WHERE YEAR (s.`datetime`) = %s and YEAR (s2.`datetime`) = %s
                     AND s2.`datetime` > s.`datetime`
+                    and s.state != s2.state
                     GROUP BY s.state, s2.state 
 
                         """
