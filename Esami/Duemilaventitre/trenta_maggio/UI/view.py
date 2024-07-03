@@ -8,66 +8,40 @@ class View(ft.UserControl):
         self._page = page
         self._page.title = "Template application using MVC and DAO"
         self._page.horizontal_alignment = 'CENTER'
-        self._page.theme_mode = ft.ThemeMode.LIGHT
+        self._page.theme_mode = ft.ThemeMode.DARK
         # controller (it is not initialized. Must be initialized in the main, after the controller is created)
         self._controller = None
         # graphical elements
         self._title = None
 
-        self.ddyear = None
-        self.ddcountry = None
-        self.txtN = None
-
-        self.btn_graph = None
-        self.btn_volume = None
-        self.btn_path = None
-
-        self.txt_result = None
-        self.txtOut2 = None
-        self.txtOut3 = None
-
-        self.txt_container = None
 
     def load_interface(self):
         # title
-        self._title = ft.Text("TdP 2024 - Lab12: Prova tema d'esame", color="blue", size=24)
+        self._title = ft.Text("TdP 2024 - Esame 30/5/23", color="yellow", size=24)
         self._page.controls.append(self._title)
 
         #ROW with some controls
-        self.ddyear = ft.Dropdown(label="Anno")
-        self.ddcountry= ft.Dropdown(label="Nazione")
+        self.ddNazione = ft.Dropdown(label="Nazione", width=200)
+        self._controller.fillDDNazioni()
+        self.ddAnno = ft.Dropdown(label="Anno", width=200)
+        self.ddAnno.options.append(ft.dropdown.Option("2015"))
+        self.ddAnno.options.append(ft.dropdown.Option("2016"))
+        self.ddAnno.options.append(ft.dropdown.Option("2017"))
+        self.ddAnno.options.append(ft.dropdown.Option("2018"))
+        self.txtInProd = ft.TextField(label="N. Prodotti", width=200)
+        self.btnGrafo = ft.ElevatedButton(text="Crea Grafo", width=200, on_click=self._controller.handle_graph)
+        row1 = ft.Row([self.ddNazione, self.ddAnno, self.txtInProd, self.btnGrafo], alignment=ft.MainAxisAlignment.CENTER)
+        self._page.add(row1)
 
-        self.btn_graph = ft.ElevatedButton(text="Crea Grafo", on_click=self._controller.handle_graph)
+        self.ddRivenditore = ft.Dropdown(label="Rivenditore", width=200)
+        self.btnAnalizza = ft.ElevatedButton(text="Analizza Componente", width=200, on_click=self._controller.handleAnalizza)
 
-        row1 = ft.Row([self.ddyear, self.ddcountry, self.btn_graph],
-                      alignment=ft.MainAxisAlignment.CENTER)
-        self._page.controls.append(row1)
-        self._controller.fillDD()
-
-        # List View where the reply is printed
-        self.txt_result = ft.ListView(expand=0, spacing=5, padding=5, auto_scroll=True)
-        self._page.controls.append(self.txt_result)
-        self._page.update()
+        row2=ft.Row([self.ddRivenditore, self.btnAnalizza], alignment=ft.MainAxisAlignment.CENTER)
+        self._page.add(row2)
 
 
-        self.btn_volume = ft.ElevatedButton(text="Calcola Volumi", on_click=self._controller.handle_volume)
-        row2 = ft.Row([self.btn_volume],
-                      alignment=ft.MainAxisAlignment.CENTER)
-        self._page.controls.append(row2)
-
-        self.txtOut2 = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
-        self._page.controls.append(self.txtOut2)
-        self._page.update()
-
-        self.txtN = ft.TextField(label="Lunghezza percorso")
-        self.btn_path = ft.ElevatedButton(text="Calcola percorso", on_click=self._controller.handle_path)
-
-        row3 = ft.Row([self.txtN, self.btn_path],
-                      alignment=ft.MainAxisAlignment.CENTER)
-        self._page.controls.append(row3)
-
-        self.txtOut3 = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
-        self._page.controls.append(self.txtOut3)
+        self.txtOut = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
+        self._page.controls.append(self.txtOut)
         self._page.update()
 
     @property
