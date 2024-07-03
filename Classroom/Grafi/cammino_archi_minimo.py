@@ -15,11 +15,9 @@ G.add_edges_from(edges)
 source = 1
 target = 5
 
-# Troviamo la lunghezza del percorso più breve usando BFS
 length = nx.shortest_path_length(G, source=source, target=target)
 print(f"Shortest path length from {source} to {target}: {length}")
 
-# Troviamo il percorso più breve usando BFS
 path = nx.shortest_path(G, source=source, target=target)
 print(f"Shortest path from {source} to {target}: {path}")
 
