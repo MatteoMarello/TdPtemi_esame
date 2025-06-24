@@ -8,46 +8,70 @@ class Controller:
         self._view = view
         # the model, which implements the logic of the program and holds the data
         self._model = model
-
+        self._teamSelected= None
 
     def fillDDTeams(self):
-        teams = self._model.getTeams()
-        for t in teams:
-            self._view.ddSquadra.options.append(ft.dropdown.Option(t))
+        """Popola il dropdown con le squadre disponibili."""
+        teams = self._model.get_teams()
 
+        # Crea le opzioni del dropdown: text=nome, data=ID
+        self._view.ddSquadra.options = [
+            ft.dropdown.Option(text=str(team[1]), data=team[0])
+            for team in teams
+        ]
 
-    def handle_graph(self, e):
-        self._view.txtOut.controls.clear()
-        team = self._view.ddSquadra.value
-        if team is None:
-            self._view.txtOut.controls.append(ft.Text("Devi selezionare una squadra!"))
-            self._view.update_page()
+        # Configura il callback per la selezione
+        self._view.ddSquadra.on_change = self.readDDTeamsValue
+        self._view.update_page()
+
+    def readDDTeamsValue(self, e):
+        """Gestisce la selezione di una squadra dal dropdown."""
+        if not e.control.value:
             return
 
-        self._model.buildGraph(team)
-        nN,nE = self._model.getGraphDetails()
-        self._view.txtOut.controls.append(ft.Text(f"Numero di vertici: {nN}"))
-        self._view.txtOut.controls.append(ft.Text(f"Numero di archi: {nE}"))
-        self.fillDDAnni()
+        selected_text = e.control.value
+        selected_team_id = None
+
+        # Cerca l'ID della squadra selezionata
+        for option in e.control.options:
+            if option.text == selected_text:
+                selected_team_id = option.data
+                break
+
+        if selected_team_id is not None:
+            self._teamSelected = selected_team_id
+            print(f"Squadra selezionata: {selected_text} (ID: {selected_team_id})")
+        else:
+            print(f"Errore: squadra '{selected_text}' non trovata")
+
+    def handle_graph(self, e):
+        if self._teamSelected is None:
+            self.mostra_errore_selezione()
+        self._model.build_graph(self._teamSelected)
+        n, a = self._model.getGraphDetails()
+        self._view.txtOut.controls.append(ft.Text(f"numero nodi:{n}, numero archi:{a}"))
         self._view.update_page()
 
 
-    def fillDDAnni(self):
-        anni = self._model.getAnni()
-        for a in anni:
-            self._view.ddAnno.options.append(ft.dropdown.Option(a))
+    def handleDettagli(self):
+        pass
 
-    def handleDettagli(self, e):
+
+
+    def mostra_errore_selezione(self):
+        # Svuota la ListView
         self._view.txtOut.controls.clear()
-        anno = int(self._view.ddAnno.value)
-        if anno is None:
-            self._view.txtOut.controls.append(ft.Text("Devi selezionare un anno dal menù a tendina!"))
-            self._view.update_page()
-            return
 
-        anniAdiacenti = self._model.getAnniAdiacenti(anno)
-        self._view.txtOut.controls.append(ft.Text(f"Gli anni adiacenti all'anno {anno} sono:"))
-        for a in anniAdiacenti:
-            self._view.txtOut.controls.append(ft.Text(F"{a[0]} --> Peso arco: {a[1]}"))
+        # Aggiunge un messaggio carino di errore
+        self._view.txtOut.controls.append(
+            ft.Text(
+                "⚠️ Per favore, seleziona un opzione!",
+                color="red",
+                size=16,
+                italic=True,
+                weight=ft.FontWeight.BOLD
+            )
+        )
 
+        # Aggiorna la pagina per riflettere i cambiamenti
         self._view.update_page()

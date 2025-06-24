@@ -5,7 +5,6 @@ class DAO():
     def __init__(self):
         pass
 
-
     @staticmethod
     def getTeams():
         cnx = DBConnect.get_connection()
@@ -14,66 +13,61 @@ class DAO():
             print("Connessione fallita")
         else:
             cursor = cnx.cursor(dictionary=True)
-            query = """
-                SELECT DISTINCT name 
-                FROM teams t 
-                order by name ASC
-                                                """
+            query = """select distinct t.name as name,  t.teamCode as ID
+from lahmansbaseballdb.teams t 
+group by name
+order by t.name
+                 """
             cursor.execute(query)
             for row in cursor:
-                result.append(row["name"])
-            cursor.close()
-            cnx.close()
-            return result
-
-
-
-    @staticmethod
-    def getNodes(team):
-        cnx = DBConnect.get_connection()
-        result = []
-        if cnx is None:
-            print("Connessione fallita")
-        else:
-            cursor = cnx.cursor(dictionary=True)
-            query = """
-                SELECT t.`year`  
-                from teams t 
-                WHERE t.name = %s
-                                                """
-            cursor.execute(query, (team,))
-            for row in cursor:
-                result.append(row["year"])
+                result.append((row["ID"], row["name"]))
             cursor.close()
             cnx.close()
             return result
 
 
     @staticmethod
-    def getWeight(firstYear, secondYear, team):
+    def getNodi(id):
         cnx = DBConnect.get_connection()
         result = []
         if cnx is None:
             print("Connessione fallita")
         else:
             cursor = cnx.cursor(dictionary=True)
-            query = """
-                SELECT COUNT(DISTINCT a2.playerID) as peso
-                FROM appearances a, teams t, appearances a2 , teams t2 
-                WHERE a.teamID = t.ID AND a2.teamID = t2.ID 
-                AND t.name = %s AND t2.name = %s 
-                AND a2.`year` = %s AND a.`year`= %s
-                AND a.playerID = a2.playerID 
-                GROUP BY a.`year`, a2.`year`
-                                                """
-            cursor.execute(query, (team, team, firstYear, secondYear))
+            query = """select t.year , a.playerID
+from lahmansbaseballdb.teams t , lahmansbaseballdb.appearances a 
+where t.teamCode = %s and a.teamCode=t.teamCode 
+group by t.year, a.playerID """
+            cursor.execute(query,(id,))
             for row in cursor:
-                result.append(row["peso"])
+                result.append((row["year"], row["playerID"]))
             cursor.close()
             cnx.close()
-            if result:
-                return result[0]
-            else:
-                return None
+            return result
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == "__main__":
+    DAO = DAO()
+    nodi = DAO.getNodi("PH1")
+    setanni = set()
+    for nodo in nodi:
+        setanni.add(nodo[0])
+    print(len(setanni))
+    print(len(nodi))
