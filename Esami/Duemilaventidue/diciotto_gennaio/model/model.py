@@ -3,68 +3,51 @@ import random
 
 import networkx as nx
 from geopy.distance import distance
+
 from Esami.Duemilaventidue.diciotto_gennaio.database.DAO import DAO
 class Model:
     def __init__(self):
-        self._providers = DAO.getProviders()
-        self._graph = nx.Graph()
-        self._bestPercorso = []
-
-    def buildGraph(self, provider, km):
-        self._graph.clear()
-        nodes = DAO.getLocations(provider)
-        self._graph.add_nodes_from(nodes)
-        for loc in self._graph.nodes:
-            for loc2 in self._graph.nodes:
-                if loc != loc2:
-                    dist = distance((loc.Latitude, loc.Longitude), (loc2.Latitude, loc2.Longitude)).km
-                    if dist <= km:
-                        self._graph.add_edge(loc, loc2, weight = dist)
-
-    def getNodiMostVicini(self):
-        res = []
-        for l in self._graph.nodes:
-            res.append((l, len(list(self._graph.neighbors(l)))))
-
-        res.sort(key=lambda l: l[1], reverse=True)
-        mostVicini = res[0][1]
-        listaMostVicini = [l for l in res if l[1] == mostVicini]
-        return listaMostVicini
+        self._grafo = nx.Graph()
+        self._idmap = {}
+        self.bestSol = []
+        self.bestScore = 0
 
 
-    def getPercorso(self, string, localitaTarget):
-        self._bestPercorso = []
-        nodiMostVicini = self.getNodiMostVicini()
-        localitaPossibili = [l[0] for l in nodiMostVicini]
-        localitaPartenza = localitaPossibili[random.randint(0, len(localitaPossibili)-1)]
-        if not nx.has_path(self._graph, localitaPartenza, localitaTarget):
-            return None
+    def build_graph(self, providernome, distanza):
+        self._grafo.clear()
+        self._idmap.clear()
+        nodi = DAO.getNodi(providernome)
+        for n in nodi:
+            self._idmap[n.Location] = n
+        self._grafo.add_nodes_from(nodi)
+        from itertools import combinations
+        for u, v in combinations(nodi, 2):
+            distanza_km = distance((u.Latitude, u.Longitude), (v.Latitude, v.Longitude)).km
+            if distanza_km <= distanza:
+                self._grafo.add_edge(u, v, weight = distanza_km)
 
-        parziale = [localitaPartenza]
-        self._ricorsione(parziale, string, localitaTarget)
-
-        return self._bestPercorso
-
-
-    def _ricorsione(self, parziale, string, localitaTarget):
-        lastNode = parziale[-1]
-        if lastNode == localitaTarget:
-            if len(parziale) > len(self._bestPercorso):
-                self._bestPercorso = copy.deepcopy(parziale)
-            return
-
-        for neighbor in self._graph.neighbors(lastNode):
-            if neighbor not in parziale and string not in neighbor.Location:
-                parziale.append(neighbor)
-                self._ricorsione(parziale, string, localitaTarget)
-                parziale.pop()
-
+    def get_provider(self):
+        return DAO.getProvider()
 
     def getGraphDetails(self):
-        return len(self._graph.nodes), len(self._graph.edges)
+        return self._grafo.number_of_nodes(), self._grafo.number_of_edges()
 
-    def getProviders(self):
-        return self._providers
+    def getVerticiParticolari(self):
+        bestNumeroVicini = 0
+        for n in self._idmap.values():
+            vicini = self._grafo.neighbors(n)
+            lunghezzaista= len(list(vicini))
+            if lunghezzaista > bestNumeroVicini:
+                bestNumeroVicini = lunghezzaista
 
-    def getLocalita(self):
-        return list(self._graph.nodes)
+        listaMigliori =[]
+        for n in self._idmap.values():
+            vicini = self._grafo.neighbors(n)
+            if len(list(vicini)) == bestNumeroVicini:
+                listaMigliori.append(f"nodo di località: {n.Location}, con numero vicini {bestNumeroVicini}")
+        return listaMigliori
+
+
+
+
+
